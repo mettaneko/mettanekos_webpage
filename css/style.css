@@ -1,0 +1,1173 @@
+@import url('https://fonts.googleapis.com/css2?family=Bytesized&family=Press+Start+2P&family=Micro+5&family=Jersey+10&family=Tiny5&Inter:wght@300;400;500;600;700&family=Manrope:wght@800&display=swap');
+:root {
+    --bg-color: #1e1710; /* Очень темный, насыщенный коричневый фон */
+    --text-primary-color: #ffffff;
+    --text-secondary-color: #c4b6a5; /* Светло-коричневый/кремовый для вторичного текста */
+    --text-active-color: #d4a06d; /* Насыщенный терракотовый или теплый оранжево-коричневый для активных элементов */
+    --text-now-color: #d46d6d; /* Насыщенный терракотовый или теплый оранжево-коричневый для активных элементов */
+    --text-link-color: #e6b88b; /* Более светлый теплый коричневый для ссылок */
+    --y2k-gradient-1: linear-gradient(135deg, #e6b88b 0%, #d4a06d 100%); /* Градиент в теплых коричневых тонах */
+    --y2k-gradient-2: linear-gradient(45deg, #e6b88b 0%, #d4a06d 50%, #e6b88b 100%); /* Градиент в теплых коричневых тонах */
+    --y2k-gradient-3: linear-gradient(to right, #e6b88b, #d4a06d); /* Градиент в теплых коричневых тонах */
+    --main-font: "VT323", monospace;
+    --heading-font: "VT323", "Montserrat", monospace;
+    --inter-font: "Inter", sans-serif;
+    --slide-spacing: 1rem;
+    --slide-size: 100%;
+    --slide-height: 19rem;
+}
+
+
+/* Общие сбросы и базовые стили */
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+
+/* Стили, когда трек играет */
+.song.now-playing .song-info__name {
+    color: var(--text-active-color); /* Например, выделить цветом */
+    /* text-shadow: 0 0 5px var(--text-active-color); */ /* Или добавить свечение */
+}
+
+.song.now-playing .plays-text {
+    color: var(--text-now-color);
+    font-weight: bold;
+    font-size: 1.5em;
+    animation: pulse 1.5s ease-in-out infinite; /* Можно использовать анимацию pulse, если она уже есть */
+}
+
+/* Если у вас есть иконка Play/Pause, можно ее показать/скрыть */
+.album-cover__overlay img {
+    opacity: 0; /* По умолчанию скрываем иконку проигрывания */
+    transition: opacity 0.3s ease;
+}
+
+.song.now-playing .album-cover__overlay img {
+    opacity: 1; /* Показываем иконку, когда трек играет */
+    animation: subtleFloat 2s ease-in-out infinite; /* Можно добавить анимацию */
+}
+
+/* Переопределяем поведение при наведении, если трек играет */
+.song.now-playing .album-cover:hover .album-cover__overlay {
+    opacity: 1; /* Всегда показываем оверлей, если играет */
+}
+html {
+    scroll-behavior: smooth;
+    background-color: var(--bg-color);
+    color: var(--text-primary-color);
+    font-family: var(--main-font);
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.project-title {
+    font-family: var(--inter-font);
+    font-weight: 600px;
+    font-size: 2.5em; /* Сохраняем существующий размер */
+    color: var(--text-primary-color); /* Сохраняем существующий цвет */
+    text-align: center; /* Центрируем текст */
+    /* Дополнительные стили, если были */
+}
+
+
+body {
+    background-color: var(--bg-color);
+    position: relative;
+    overflow-x: hidden;
+    margin: 0;
+    font-family: var(--main-font);
+    padding: 0; /* Убрано padding из body, так как он задан в .container */
+}
+
+body:before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, rgba(255, 77, 158, .03) 1px, transparent 1px) 0 0 / 40px 40px,
+                linear-gradient(0deg, rgba(255, 77, 158, .03) 1px, transparent 1px) 0 0 / 40px 40px;
+    pointer-events: none;
+    z-index: -2;
+}
+
+body:after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 50% 0%, rgba(255, 77, 158, .15), transparent 70%);
+    pointer-events: none;
+    z-index: -1;
+}
+
+a {
+    color: var(--text-link-color);
+    text-decoration: none;
+    transition: color .3s ease;
+}
+
+a:hover {
+    color: var(--text-active-color);
+}
+
+select {
+    -moz-appearance: none;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+img, h1, h2, h3, span, p, small {
+    pointer-events: none;
+}
+
+button {
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+}
+
+/* Общие стили для контейнеров и макета */
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px 32px; /* Исходное значение из .svelte-witepv.container */
+}
+
+.layout { /* Изначально .layout.svelte-1qqnmff */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    max-width: 1000px; /* Дублируется с .container, можно пересмотреть */
+    margin: 0 auto;
+    padding: 32px; /* Исходное значение */
+    position: relative;
+}
+
+.layout:before { /* Изначально .layout.svelte-1qqnmff:before */
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%);
+    width: 100vw;
+    height: 100vh;
+    background: radial-gradient(circle at 50% 0%, rgba(255, 94, 0, .15) 0%, transparent 60%);
+    z-index: -1;
+    pointer-events: none;
+}
+
+main { /* Изначально main.svelte-witepv и main.svelte-1qqnmff */
+    flex: 1;
+    width: 100%;
+    display: flex; /* Добавлено из main.svelte-witepv */
+    flex-direction: column; /* Добавлено из main.svelte-witepv */
+    gap: 60px; /* Добавлено из main.svelte-witepv */
+}
+
+header { /* Изначально header.svelte-witepv */
+    margin-bottom: 100px;
+}
+
+footer { /* Изначально footer.svelte-1qqnmff */
+    padding: 16px 0;
+    border-top: 1px solid rgba(255, 255, 255, .1);
+}
+
+section { /* Изначально section.svelte-witepv */
+    opacity: 0;
+    animation: fadeIn .5s ease forwards;
+}
+
+section h2 { /* Изначально section.svelte-witepv h2 */
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 32px;
+    color: var(--text-primary-color);
+}
+
+/* Анимации */
+@keyframes subtleFloat { /* Изначально @keyframes svelte-1qqnmff-subtleFloat */
+    0%, to {
+        transform: translate(0) rotate(0);
+    }
+    25% {
+        transform: translate(-20px, 20px) rotate(-.5deg);
+    }
+    75% {
+        transform: translate(20px, -20px) rotate(.5deg);
+    }
+}
+
+@keyframes fadeIn { /* Изначально @keyframes svelte-witepv-fadeIn */
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes modalExit { /* Изначально @keyframes svelte-y5edra-modalExit */
+    0% {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes modalOpen { /* Изначально @keyframes svelte-y5edra-modalOpen */
+    0% {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes pulse { /* Изначально @keyframes svelte-4chmsb-pulse */
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: .5;
+        transform: scale(.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Стили для карточек ("Glass Card") */
+.card { /* Изначально .card.svelte-1w9lwcw */
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    border-radius: 20px;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, .1);
+    background: linear-gradient(135deg, rgba(255, 255, 255, .05) 0%, rgba(255, 255, 255, .02) 100%);
+    box-shadow: 0 8px 32px #0000001a;
+}
+
+.card-subtle { /* Изначально .card-subtle.svelte-1w9lwcw */
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+    background: linear-gradient(135deg, rgba(255, 255, 255, .02) 0%, rgba(255, 255, 255, .01) 100%);
+    box-shadow: none;
+}
+
+.card-prominent { /* Изначально .card-prominent.svelte-1w9lwcw */
+    -webkit-backdrop-filter: blur(15px);
+    backdrop-filter: blur(15px);
+    background: linear-gradient(135deg, rgba(255, 255, 255, .08) 0%, rgba(255, 255, 255, .03) 100%);
+    box-shadow: 0 8px 32px #0003, 0 0 0 1px #ffffff26;
+}
+
+.card-max-width { /* Изначально .card-max-width.svelte-1w9lwcw */
+    width: 100%;
+}
+
+.card-fixed { /* Изначально .card-fixed.svelte-1w9lwcw */
+    width: 380px;
+    max-width: 100%;
+    max-height: none; /* Убрано min-height, так как оно в медиа-запросах */
+}
+
+.card-block { /* Изначально .card-block.svelte-1w9lwcw */
+    display: block !important;
+}
+
+.card-hoverable { /* Изначально .card-hoverable.svelte-1w9lwcw */
+    transition: all .3s cubic-bezier(.4, 0, .2, 1);
+}
+
+.card-clickable { /* Изначально .card-clickable.svelte-1w9lwcw */
+    cursor: pointer;
+}
+
+.card-hoverable:hover { /* Изначально .card-hoverable.svelte-1w9lwcw:hover */
+    transform: translateY(-2px);
+    border-color: #fff3;
+    box-shadow: 0 10px 40px #0003;
+}
+
+.card-centered { /* Изначально .card-centered.svelte-1w9lwcw */
+    justify-content: center;
+}
+
+/* Стили для Hero секции (профиль) */
+.hero { /* Изначально .hero.svelte-4chmsb */
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.hero__sidebar { /* Изначально .hero__sidebar.svelte-4chmsb */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.profile-card { /* Изначально .profile-card.svelte-4chmsb */
+    background: rgba(255, 255, 255, .05);
+    border: 1px solid rgba(255, 255, 255, .1);
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.avatar { /* Изначально .avatar.svelte-4chmsb */
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    border: 2px solid rgba(255, 255, 255, .1);
+}
+
+.stats { /* Изначально .stats.svelte-4chmsb и .stats.svelte-witepv */
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    animation-delay: .2s; /* Из .stats.svelte-witepv */
+}
+
+.stat-item { /* Изначально .stat-item.svelte-4chmsb */
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.stat-label { /* Изначально .stat-label.svelte-4chmsb и .stat-label.svelte-gwv9hv */
+    font-family: var(--heading-font);
+    font-size: 12px;
+    color: var(--text-secondary-color);
+    letter-spacing: 1px;
+    opacity: .8; /* Из .stat-label.svelte-gwv9hv */
+}
+
+.stat-value { /* Изначально .stat-value.svelte-4chmsb */
+    font-family: var(--main-font);
+    font-size: 16px;
+    color: var(--text-primary-color);
+}
+
+.hero__main { /* Изначально .hero__main.svelte-4chmsb */
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.title-section { /* Изначально .title-section.svelte-4chmsb */
+    text-align: left;
+}
+
+h1 { /* Изначально h1.svelte-4chmsb и h1.svelte-y5edra */
+    font-family: var(--heading-font);
+    font-size: 48px;
+    background: var(--y2k-gradient-1);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 8px;
+    padding-right: 15px; /* Из h1.svelte-y5edra */
+}
+
+.subtitle { /* Изначально .subtitle.svelte-4chmsb */
+    font-family: var(--main-font);
+    font-size: 20px;
+    color: var(--text-secondary-color);
+}
+
+h2 { /* Изначально h2.svelte-4chmsb и h2.svelte-187spwm (и section h2.svelte-witepv) */
+    font-family: var(--heading-font); /* Дублируется в section h2 */
+    font-size: 28px; /* Изначально 28px для .svelte-187spwm */
+    font-weight: 600; /* Дублируется в section h2 */
+    margin-bottom: 20px; /* Изначально 20px для .svelte-187spwm */
+    color: var(--text-primary-color); /* Дублируется в section h2 */
+    letter-spacing: 2px; /* Из h2.svelte-4chmsb */
+}
+
+.roles-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Изменено для двух колонок */
+    gap: 20px;
+}
+
+.role-card { /* Изначально .role-card.svelte-4chmsb */
+    background: rgba(255, 255, 255, .05);
+    border: 1px solid rgba(255, 255, 255, .1);
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    transition: all .3s ease;
+}
+
+.role-card:hover { /* Изначально .role-card.svelte-4chmsb:hover */
+    background: rgba(255, 255, 255, .1);
+    transform: translateY(-2px);
+}
+
+.role-title { /* Изначально .role-title.svelte-4chmsb */
+    font-family: var(--main-font);
+    font-size: 18px;
+    color: var(--text-primary-color);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.project-card { /* Изначально .project-card.svelte-4chmsb */
+    background: rgba(255, 255, 255, .05);
+    border: 1px solid rgba(255, 255, 255, .1);
+    border-radius: 8px;
+    padding: 20px;
+    display: block;
+    transition: all .3s cubic-bezier(.4, 0, .2, 1);
+}
+
+.project-card:hover { /* Изначально .project-card.svelte-4chmsb:hover */
+    background: rgba(255, 255, 255, .1);
+    transform: translateY(-2px);
+}
+
+.project-card img { /* Изначально .project-card.svelte-4chmsb img */
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform .3s cubic-bezier(.4, 0, .2, 1);
+}
+
+.project-card:hover img { /* Изначально .project-card.svelte-4chmsb:hover img */
+    transform: scale(1.02);
+}
+
+.retro-stats { /* Изначально .retro-stats.svelte-4chmsb */
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, .1);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Стили для музыкального трека */
+.song { /* Изначально .song.svelte-1rlr62p */
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+}
+
+.album-cover { /* Изначально .album-cover.svelte-1rlr62p */
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform .3s cubic-bezier(.4, 0, .2, 1);
+    flex-shrink: 0;
+}
+
+.album-cover:hover { /* Изначально .album-cover.svelte-1rlr62p:hover */
+    transform: scale(1.05);
+}
+
+.album-cover img { /* Изначально .album-cover.svelte-1rlr62p img */
+    display: block;
+    transition: all .3s cubic-bezier(.4, 0, .2, 1);
+}
+
+.album-cover:hover img { /* Изначально .album-cover.svelte-1rlr62p:hover img */
+    filter: brightness(.7) blur(1px);
+}
+
+.album-cover__overlay { /* Изначально .album-cover__overlay.svelte-1rlr62p */
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, .4);
+    opacity: 0;
+    transition: opacity .3s cubic-bezier(.4, 0, .2, 1);
+}
+
+.album-cover:hover .album-cover__overlay { /* Изначально .album-cover.svelte-1rlr62p:hover .album-cover__overlay */
+    opacity: 1;
+}
+
+.song-info { /* Изначально .song-info.svelte-1rlr62p */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-width: 0;
+    width: 100%;
+    gap: 8px;
+}
+
+.song-info__text { /* Изначально .song-info__text.svelte-1rlr62p */
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: 2px;
+}
+
+.song-info__name { /* Изначально .song-info__name.svelte-1rlr62p */
+    font-weight: 600;
+    font-size: 17px;
+    color: #fffffff2;
+    transition: all .3s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.song-info__artist { /* Изначально .song-info__artist.svelte-1rlr62p */
+    font-size: 15px;
+    color: #ffffffb3;
+    transition: all .3s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.song-info__plays { /* Изначально .song-info__plays.svelte-1rlr62p */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+    flex-shrink: 0;
+}
+
+.plays { /* Изначально .plays.svelte-1rlr62p */
+    font-weight: 600;
+    font-size: 17px;
+    color: #fffffff2;
+}
+
+.plays-text { /* Изначально .plays-text.svelte-1rlr62p */
+    font-size: 13px;
+    color: #fff9;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+}
+
+/* Стили для игры */
+.game { /* Изначально .game.svelte-18rrp0r */
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+}
+
+.game-cover { /* Изначально .game-cover.svelte-18rrp0r */
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.game-cover img { /* Изначально .game-cover.svelte-18rrp0r img */
+    display: block;
+    transition: all .3s cubic-bezier(.4, 0, .2, 1);
+    filter: brightness(.95);
+}
+
+.game-cover__glow { /* Изначально .game-cover__glow.svelte-18rrp0r */
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    bottom: -20px;
+    left: -20px;
+    background: radial-gradient(circle at center, rgba(255, 255, 255, .15) 0%, rgba(255, 255, 255, 0) 70%);
+    opacity: 0;
+    transition: opacity .3s cubic-bezier(.4, 0, .2, 1);
+    pointer-events: none;
+}
+
+.game-info { /* Изначально .game-info.svelte-18rrp0r */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-width: 0;
+    width: 100%;
+    gap: 8px;
+}
+
+.game-info__text { /* Изначально .game-info__text.svelte-18rrp0r */
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: 2px;
+}
+
+.game-info__name { /* Изначально .game-info__name.svelte-18rrp0r */
+    font-weight: 600;
+    font-size: 17px;
+    color: #fffffff2;
+    transition: all .3s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.game-info__platform { /* Изначально .game-info__platform.svelte-18rrp0r */
+    font-size: 15px;
+    color: #ffffffb3;
+    margin: 0;
+}
+
+.game-info__time { /* Изначально .game-info__time.svelte-18rrp0r */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+    flex-shrink: 0;
+}
+
+.hours { /* Изначально .hours.svelte-18rrp0r */
+    font-weight: 600;
+    font-size: 17px;
+    color: #fffffff2;
+}
+
+.hours-text { /* Изначально .hours-text.svelte-18rrp0r */
+    font-size: 13px;
+    color: #fff9;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+}
+
+.card:hover .game-cover img { /* Изначально .card:hover .game-cover.svelte-18rrp0r img */
+    filter: brightness(1);
+    transform: scale(1.05);
+}
+
+.card:hover .game-cover__glow { /* Изначально .card:hover .game-cover__glow.svelte-18rrp0r */
+    opacity: 1;
+}
+
+/* Стили для секции данных (weekly stats) */
+.data { /* Изначально .data.svelte-187spwm */
+    width: 100%;
+}
+
+.data-grid { /* Изначально .data-grid.svelte-187spwm */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+    width: 100%;
+}
+
+.data-card { /* Изначально .data-card.svelte-187spwm */
+    border-radius: 16px;
+    padding: 16px;
+    transition: all .2s ease;
+}
+
+.data-card:hover { /* Изначально .data-card.svelte-187spwm:hover */
+    border-color: #363636;
+    transform: translateY(-2px);
+}
+
+/* Стили для ссылок (иконок соцсетей) */
+.link { /* Изначально .link.svelte-1r5pox7 */
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.link__glow { /* Изначально .link__glow.svelte-1r5pox7 */
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    bottom: -20px;
+    left: -20px;
+    background: radial-gradient(circle at center, rgba(255, 255, 255, .15) 0%, rgba(255, 255, 255, 0) 70%);
+    opacity: 0;
+    transition: opacity .3s cubic-bezier(.4, 0, .2, 1);
+}
+
+.card:hover .link__glow { /* Изначально .card:hover .link__glow.svelte-1r5pox7 */
+    opacity: 1;
+}
+
+.link img { /* Изначально img.svelte-1r5pox7 */
+    object-fit: contain;
+    transition: all .3s cubic-bezier(.4, 0, .2, 1);
+    filter: brightness(.95) drop-shadow(0 2px 4px rgba(0, 0, 0, .1));
+    z-index: 1;
+}
+
+.card:hover .link img { /* Изначально .card:hover img.svelte-1r5pox7 */
+    filter: brightness(1) drop-shadow(0 4px 8px rgba(0, 0, 0, .2));
+    transform: scale(1.05) translateY(-2px);
+}
+
+/* Стили для селектора (вкладок ссылок) */
+.selector { /* Изначально .selector.svelte-xheki */
+    margin: 15px 0;
+    font-size: 32px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.selector a { /* Изначально .selector.svelte-xheki a */
+    cursor: pointer;
+    opacity: .2;
+    transition: all .3s cubic-bezier(.4, 0, .2, 1);
+    position: relative;
+    padding: 0 5px;
+}
+
+.selector a:after { /* Изначально .selector.svelte-xheki a:after */
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    bottom: -4px;
+    left: 0;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, .5) 50%, rgba(255, 255, 255, 0) 100%);
+    transform: scaleX(0);
+    transition: transform .3s cubic-bezier(.4, 0, .2, 1);
+}
+
+.selector a:hover { /* Изначально .selector.svelte-xheki a:hover */
+    opacity: .5;
+}
+
+.selector a:hover:after { /* Изначально .selector.svelte-xheki a:hover:after */
+    transform: scaleX(1);
+}
+
+.active { /* Изначально .active.svelte-xheki */
+    opacity: 1 !important;
+}
+
+.active:after { /* Изначально .active.svelte-xheki:after */
+    transform: scaleX(1) !important;
+}
+
+.selector span { /* Изначально span.svelte-xheki */
+    opacity: .2;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+/* Стили для Embla Carousel (если используется) */
+.embla { /* Изначально .embla.svelte-xheki */
+    --slide-spacing: 1rem;
+    --slide-size: 100%;
+    --slide-height: 19rem;
+    position: relative;
+    width: 100%;
+}
+
+.embla__viewport { /* Изначально .embla__viewport.svelte-xheki */
+    overflow: hidden;
+    width: 100%;
+}
+
+.embla__container { /* Изначально .embla__container.svelte-xheki */
+    backface-visibility: hidden;
+    display: flex;
+    touch-action: pan-y;
+    margin-left: calc(var(--slide-spacing) * -1);
+    padding-left: 10px;
+    will-change: transform;
+}
+
+.embla__slide { /* Изначально .embla__slide.svelte-xheki */
+    flex: 0 0 100%;
+    width: 0;
+    min-width: 0;
+    padding-left: calc(var(--slide-spacing));
+    padding-top: 5px;
+    padding-bottom: 5px;
+    position: relative;
+}
+
+.buttons { /* Изначально .buttons.svelte-xheki */
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* Стили для счетчика посещений */
+.visit-counter { /* Изначально .visit-counter.svelte-gwv9hv */
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.counter-display { /* Изначально .counter-display.svelte-gwv9hv */
+    display: flex;
+    gap: 1px;
+    justify-content: center;
+    padding: 2px;
+    background: rgba(0, 0, 0, .3);
+    border-radius: 4px;
+    min-height: 32px;
+}
+
+.counter-digit { /* Изначально .counter-digit.svelte-gwv9hv */
+    font-family: var(--heading-font);
+    font-size: 18px;
+    background: var(--y2k-gradient-1);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    padding: 1px 2px;
+    border: 1px solid rgba(255, 77, 158, .2);
+    border-radius: 2px;
+}
+
+.loading { /* Изначально .loading.svelte-gwv9hv */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--heading-font);
+    font-size: 14px;
+    color: var(--text-secondary-color);
+}
+
+/* Стили для модального окна */
+.modal { /* Изначально .modal.svelte-y5edra */
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    right: 0;
+    background-color: #00000080;
+    z-index: 10;
+    opacity: 0;
+}
+
+.modal__inner { /* Изначально .modal__inner.svelte-y5edra */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.modal__closed { /* Изначально .modal__closed.svelte-y5edra */
+    animation: .3s ease modalExit forwards;
+}
+
+.modal__opened { /* Изначально .modal__opened.svelte-y5edra */
+    animation: .3s ease modalOpen forwards;
+}
+
+.modal-header { /* Изначально .modal-header.svelte-y5edra */
+    display: flex;
+    margin-bottom: 15px;
+}
+
+.modal-header__close { /* Изначально .modal-header__close.svelte-y5edra */
+    margin-left: auto;
+    transition: opacity .2s ease;
+}
+
+.modal-header__close img { /* Изначально .modal-header__close.svelte-y5edra img */
+    width: 32px;
+    height: 32px;
+}
+
+.modal-header__close:hover { /* Изначально .modal-header__close.svelte-y5edra:hover */
+    opacity: .5;
+}
+
+/* Стили для Webring */
+.webring-container { /* Изначально .webring-container.svelte-u9au58 */
+    width: 100%;
+    margin-top: 15px;
+}
+
+.webring { /* Изначально .webring.svelte-u9au58 */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.webring > p { /* Изначально .webring.svelte-u9au58 > p */
+    font-weight: 700;
+    font-size: 21px;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+}
+
+.webring__button { /* Изначально .webring__button.svelte-u9au58 */
+    display: flex;
+    align-items: center;
+    transition: opacity .3s ease;
+    gap: 15px;
+    font-size: 19px;
+}
+
+.webring__button:hover { /* Изначально .webring__button.svelte-u9au58:hover */
+    opacity: .5;
+}
+
+.webring__right-arrow { /* Изначально .webring__right-arrow.svelte-u9au58 */
+    transform: rotate(180deg);
+}
+
+.webring img { /* Изначально img.svelte-u9au58 */
+    width: 15px;
+}
+
+/* Медиа-запросы */
+/* 850px */
+@media only screen and (max-width: 850px) {
+    body {
+        padding: 25px 0;
+    }
+    .container {
+        padding: 0 25px;
+        gap: 60px; /* Из .container.svelte-witepv */
+    }
+    header {
+        margin-bottom: 60px; /* Из header.svelte-witepv */
+    }
+    main {
+        gap: 40px; /* Из main.svelte-witepv */
+    }
+    section h2 {
+        font-size: 20px; /* Из section.svelte-witepv h2 */
+        margin-bottom: 24px; /* Из section.svelte-witepv h2 */
+    }
+    .hero {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+    .hero__sidebar {
+        order: 2;
+        max-width: 400px;
+        margin: 0 auto;
+        width: 100%;
+    }
+    .hero__main {
+        order: 1;
+    }
+    .title-section {
+        text-align: center;
+    }
+    h1 {
+        font-size: 36px;
+    }
+    .subtitle {
+        font-size: 18px;
+    }
+    h2 { /* Для .data-grid h2, так как оно специфичнее */
+        font-size: 24px; /* Изначально 24px для .svelte-187spwm */
+        margin-bottom: 20px; /* Изначально 20px для .svelte-187spwm */
+    }
+    .roles-grid {
+        grid-template-columns: 1fr;
+    }
+    .card {
+        padding: 16px;
+        width: 100%;
+        border-radius: 16px;
+    }
+    .card-fixed {
+        width: 100%;
+        max-height: none;
+    }
+    .card-no-borders {
+        border-radius: 12px;
+    }
+    .card-hoverable:hover {
+        transform: none;
+        box-shadow: none;
+    }
+    .data-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    .data-card {
+        padding: 16px;
+    }
+    .selector {
+        text-align: center;
+        font-size: 20px;
+        gap: 10px;
+    }
+    .buttons {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 12px;
+    }
+    .embla {
+        --slide-spacing: 2rem;
+    }
+    .embla__container {
+        padding: 0 25px;
+    }
+    .selector a:after {
+        bottom: -2px;
+    }
+    .selector a {
+        padding: 0 2px;
+    }
+    .layout {
+        padding: 16px;
+    }
+}
+
+/* 450px */
+@media only screen and (max-width: 450px) {
+    body {
+        padding: 16px 0;
+    }
+    .container {
+        padding: 0 16px;
+        gap: 40px; /* Из .container.svelte-witepv */
+    }
+    .song {
+        gap: 8px;
+    }
+    .album-cover img {
+        width: 48px;
+        height: 48px;
+    }
+    .song-info__name {
+        font-size: 15px;
+    }
+    .song-info__artist {
+        font-size: 13px;
+    }
+    .plays {
+        font-size: 15px;
+    }
+    .plays-text {
+        font-size: 11px;
+    }
+    .card {
+        padding: 12px;
+        border-radius: 12px;
+    }
+    .card-fixed {
+        max-height: none;
+        min-height: 72px;
+    }
+    .counter-digit {
+        font-size: 16px;
+        padding: 1px;
+    }
+    .counter-display {
+        min-height: 28px;
+    }
+    .loading {
+        font-size: 12px;
+    }
+    .stat-label {
+        font-size: 10px;
+    }
+    .hero {
+        gap: 20px;
+    }
+    h1 {
+        font-size: 28px;
+    }
+    .subtitle {
+        font-size: 16px;
+    }
+    .stat-label { /* Для .hero__sidebar .stat-label, так как выше было переопределение */
+        font-size: 10px;
+    }
+    .stat-value {
+        font-size: 14px;
+    }
+    .role-title {
+        font-size: 16px;
+    }
+    .selector {
+        font-size: 16px;
+        gap: 6px;
+        margin: 10px 0;
+    }
+    .buttons {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 8px;
+    }
+    .embla__container {
+        padding: 0 12px;
+    }
+    .selector span {
+        font-size: 14px;
+    }
+    .webring > p {
+        font-size: 15px;
+    }
+    .webring__button {
+        font-size: 13px;
+        gap: 10px;
+    }
+    .webring img {
+        width: 12px;
+    }
+}
+
+/* 420px */
+@media only screen and (max-width: 420px) {
+    .song {
+        gap: 6px;
+    }
+    .album-cover img {
+        width: 40px;
+        height: 40px;
+    }
+    .song-info__name {
+        font-size: 13px;
+    }
+    .song-info__artist {
+        font-size: 11px;
+    }
+    .plays {
+        font-size: 13px;
+    }
+    .plays-text {
+        font-size: 9px;
+    }
+    .card {
+        padding: 10px;
+        border-radius: 10px;
+    }
+    .card-fixed {
+        min-height: 64px;
+    }
+}
