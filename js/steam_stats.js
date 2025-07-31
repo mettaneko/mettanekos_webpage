@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const STEAM_API_KEY = 'E6350257FF2662E6F9FE7D4047BBBC51'; // Замените на ваш Steam API ключ
+    const STEAM_API_KEY = '054B17E9DD877057D92003D57A188D9C'; // Замените на ваш Steam API ключ
     const STEAM_ID_64 = '76561199131765029'; // Замените на 17-значный SteamID64 пользователя
     const GAME_STATS_ELEMENT = document.querySelector('.data-card .game'); // Селектор для вашей карточки игры
 
