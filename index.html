@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>mettaneko</title>
+    <link rel="shortcut icon" href="https://mc-heads.net/avatar/mettaneko/100/ico.ico" type="image/x-icon">
     <meta name="keywords" content="mettaneko mttnk меттанеко метта мэтта мэттанеко мета мэта метанеко мэтанеко сервер сервера minecraft майнкрафт майнкрафт plasmo rp рпсервера рп датапак дата пак nautilus Rilda Rework rilda rilda server project rilda project://rilda мяу гав рильда проджект проект рильда">
     <meta name="description" content="useless programmer i guess">
     <link rel="stylesheet" href="css/style.css"> </head>
@@ -13,11 +14,12 @@
             </header>
 
         <main>
-            <section class="hero"> <div class="hero__sidebar"> <div class="profile-card card"> <img src="assets/avatar.gif" alt="mettaneko avatar" class="avatar">
+            <section class="hero"> <div class="hero__sidebar"> <img src="assets/avatar.gif" alt="mettaneko avatar" class="avatar"> <div class="profile-card card"> 
+                
                         <div class="stats">
                             <div class="stat-item">
                                 <span class="stat-label">AGE:</span>
-                                <span class="stat-value">16</span>
+                                <span class="stat-value" id="ageCounter"></span>
                             </div>
                             <!--<div class="visit-counter stat-item">
                                 <span class="stat-label">TOTAL VISITS</span>
@@ -39,7 +41,7 @@
                         <h1>mettaneko</h1>
                         <p class="subtitle">useless programmer i guess</p>
                     </div>
-                    <h2>OCCUPATIONS</h2>
+                    <h2 class="hobbies">HOBBIES</h2>
                     <div class="roles-grid">
                         <div class="role-card card card-subtle">
                             <span class="role-title">GAMEDEV</span>
@@ -48,10 +50,10 @@
                             <span class="role-title">WEB</span>
                         </div>
                         <div class="role-card card card-subtle">
-                            <span class="role-title">3D ARTIST</span>
+                            <span class="role-title">DATAPACKS</span>
                         </div>
                         <div class="role-card card card-subtle">
-                            <span class="role-title">PROFESSIONAL</span>
+                            <span class="role-title">SHITPOSTING</span>
                         </div>
                     </div>
 
@@ -70,14 +72,14 @@
                     <div class="data-card card card-subtle card-hoverable card-clickable">
                         <a href="#" class="song">
                             <div class="album-cover">
-                                <img src="music-cover.png" alt="cover" width="60" height="60">
+                                <img src="assets/on_off.png" alt="cover" width="60" height="60">
                                 <div class="album-cover__overlay">
                                     <img src="play_icon.png" alt="Play" width="24" height="24"> </div>
                             </div>
                             <div class="song-info">
                                 <div class="song-info__text">
-                                    <p class="song-info__name">see you in heaven</p>
-                                    <p class="song-info__artist">Luchikoveen</p>
+                                    <p class="song-info__name">Placeholder</p>
+                                    <p class="song-info__artist">Artist</p>
                                 </div>
                                 <div class="song-info__plays">
                                     <span class="plays">LAST</span>
@@ -89,16 +91,16 @@
                     <div class="data-card card card-subtle card-hoverable card-clickable">
                         <a href="#" class="game">
                             <div class="game-cover">
-                                <img src="cs2-icon.png" alt="CS2 icon" width="60" height="60">
+                                <img src="assets/on_off.png" alt="CS2 icon" width="60" height="60">
                                 <div class="game-cover__glow"></div>
                             </div>
                             <div class="game-info">
                                 <div class="game-info__text">
-                                    <p class="game-info__name">Counter-Strike 2</p>
+                                    <p class="game-info__name">Placeholder</p>
                                     <p class="game-info__platform">Steam</p>
                                 </div>
                                 <div class="game-info__time">
-                                    <span class="hours">1.5</span>
+                                    <span class="hours">N/A</span>
                                     <span class="hours-text">HOURS</span>
                                 </div>
                             </div>
@@ -107,59 +109,75 @@
                 </div>
             </section>
 
+
             <section class="links-section">
                 <h2>links</h2>
-                <div class="selector">
-                    <a href="#" class="active">socials</a>
+                <div class="selector" id="linksSelector">
+                    <a href="#" class="active" data-target="socials">socials</a>
                     <span>—</span>
-                    <a href="#">contacts</a>
+                    <a href="#" data-target="contacts">contacts</a>
                     <span>—</span>
-                    <a href="#">my music</a>
-                    <span>—</span>
-                    <a href="#">donate</a>
+                    <a href="#" data-target="donate">donate</a>
                 </div>
-                <div class="buttons">
-                    <a href="#" class="card card-fixed card-hoverable link">
-                        <img src="social_icon_1.png" alt="Social Media 1" width="32" height="32">
-                        <div class="link__glow"></div>
+                <div class="links-content-wrapper">
+                    <div class="links-content-inner">
+                        <div class="buttons links-category" id="socialsButtons" data-category="socials">
+                                                <a href="https://t.me/mettaneko" class="card card-fixed link">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" id="MyRect">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M24 12C24 18.6274 18.6274 24 12 24C5.37258 24 0 18.6274 0 12C0 5.37258 5.37258 0 12 0C18.6274 0 24 5.37258 24 12ZM12.43 8.85893C11.2629 9.3444 8.93015 10.3492 5.43191 11.8733C4.86385 12.0992 4.56628 12.3202 4.53919 12.5363C4.4934 12.9015 4.95073 13.0453 5.57349 13.2411C5.6582 13.2678 5.74598 13.2954 5.83596 13.3246C6.44866 13.5238 7.27284 13.7568 7.70131 13.766C8.08996 13.7744 8.52375 13.6142 9.00266 13.2853C12.2712 11.079 13.9584 9.96381 14.0643 9.93977C14.1391 9.92281 14.2426 9.90148 14.3128 9.96385C14.3829 10.0262 14.3761 10.1443 14.3686 10.176C14.3233 10.3691 12.5281 12.0381 11.5991 12.9018C11.3095 13.171 11.1041 13.362 11.0621 13.4056C10.968 13.5034 10.8721 13.5958 10.78 13.6846C10.2108 14.2333 9.78393 14.6448 10.8036 15.3168C11.2937 15.6397 11.6858 15.9067 12.077 16.1731C12.5042 16.4641 12.9303 16.7543 13.4816 17.1157C13.6221 17.2078 13.7562 17.3034 13.8869 17.3965C14.3841 17.751 14.8308 18.0694 15.3826 18.0186C15.7033 17.9891 16.0345 17.6876 16.2027 16.7884C16.6002 14.6632 17.3816 10.0585 17.5622 8.16098C17.5781 7.99473 17.5582 7.78197 17.5422 7.68858C17.5262 7.59518 17.4928 7.46211 17.3714 7.3636C17.2276 7.24694 17.0057 7.22234 16.9064 7.22408C16.455 7.23204 15.7626 7.47282 12.43 8.85893Z" fill="#b89470"/>
+                        </svg>
                     </a>
-                    <a href="#" class="card card-fixed card-hoverable link">
-                        <img src="social_icon_2.png" alt="Social Media 2" width="32" height="32">
-                        <div class="link__glow"></div>
+                    <a href="https://steamcommunity.com/id/mettaneko_/" class="card card-fixed link">
+                        <svg fill="#b89470" width="48" height="48" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18.102 12.129c0-0 0-0 0-0.001 0-1.564 1.268-2.831 2.831-2.831s2.831 1.268 2.831 2.831c0 1.564-1.267 2.831-2.831 2.831-0 0-0 0-0.001 0h0c-0 0-0 0-0.001 0-1.563 0-2.83-1.267-2.83-2.83 0-0 0-0 0-0.001v0zM24.691 12.135c0-2.081-1.687-3.768-3.768-3.768s-3.768 1.687-3.768 3.768c0 2.081 1.687 3.768 3.768 3.768v0c2.080-0.003 3.765-1.688 3.768-3.767v-0zM10.427 23.76l-1.841-0.762c0.524 1.078 1.611 1.808 2.868 1.808 1.317 0 2.448-0.801 2.93-1.943l0.008-0.021c0.155-0.362 0.246-0.784 0.246-1.226 0-1.757-1.424-3.181-3.181-3.181-0.405 0-0.792 0.076-1.148 0.213l0.022-0.007 1.903 0.787c0.852 0.364 1.439 1.196 1.439 2.164 0 1.296-1.051 2.347-2.347 2.347-0.324 0-0.632-0.066-0.913-0.184l0.015 0.006zM15.974 1.004c-7.857 0.001-14.301 6.046-14.938 13.738l-0.004 0.054 8.038 3.322c0.668-0.462 1.495-0.737 2.387-0.737 0.001 0 0.002 0 0.002 0h-0c0.079 0 0.156 0.005 0.235 0.008l3.575-5.176v-0.074c0.003-3.12 2.533-5.648 5.653-5.648 3.122 0 5.653 2.531 5.653 5.653s-2.531 5.653-5.653 5.653h-0.131l-5.094 3.638c0 0.065 0.005 0.131 0.005 0.199 0 0.001 0 0.002 0 0.003 0 2.342-1.899 4.241-4.241 4.241-2.047 0-3.756-1.451-4.153-3.38l-0.005-0.027-5.755-2.383c1.841 6.345 7.601 10.905 14.425 10.905 8.281 0 14.994-6.713 14.994-14.994s-6.713-14.994-14.994-14.994c-0 0-0.001 0-0.001 0h0z"></path>
+                        </svg>
                     </a>
-                    <a href="#" class="card card-fixed card-hoverable link">
-                        <img src="social_icon_3.png" alt="Social Media 3" width="32" height="32">
-                        <div class="link__glow"></div>
+                    <a href="https://www.youtube.com/@mettaneko" class="card card-fixed link">
+                        <svg fill="#b89470" width="48" height="48" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12.932 20.459v-8.917l7.839 4.459zM30.368 8.735c-0.354-1.301-1.354-2.307-2.625-2.663l-0.027-0.006c-3.193-0.406-6.886-0.638-10.634-0.638-0.381 0-0.761 0.002-1.14 0.007l0.058-0.001c-0.322-0.004-0.701-0.007-1.082-0.007-3.748 0-7.443 0.232-11.070 0.681l0.434-0.044c-1.297 0.363-2.297 1.368-2.644 2.643l-0.006 0.026c-0.4 2.109-0.628 4.536-0.628 7.016 0 0.088 0 0.176 0.001 0.263l-0-0.014c-0 0.074-0.001 0.162-0.001 0.25 0 2.48 0.229 4.906 0.666 7.259l-0.038-0.244c0.354 1.301 1.354 2.307 2.625 2.663l0.027 0.006c3.193 0.406 6.886 0.638 10.634 0.638 0.38 0 0.76-0.002 1.14-0.007l-0.058 0.001c0.322 0.004 0.702 0.007 1.082 0.007 3.749 0 7.443-0.232 11.070-0.681l-0.434 0.044c1.298-0.362 2.298-1.368 2.646-2.643l0.006-0.026c0.399-2.109 0.627-4.536 0.627-7.015 0-0.088-0-0.176-0.001-0.263l0 0.013c0-0.074 0.001-0.162 0.001-0.25 0-2.48-0.229-4.906-0.666-7.259l0.038 0.244z"></path>
+                        </svg>
                     </a>
-                    <a href="#" class="card card-fixed card-hoverable link">
-                        <img src="social_icon_4.png" alt="Social Media 4" width="32" height="32">
-                        <div class="link__glow"></div>
+                    <a href="https://discord.gg/askydVhwJ3" class="card card-fixed link">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18.59 5.88997C17.36 5.31997 16.05 4.89997 14.67 4.65997C14.5 4.95997 14.3 5.36997 14.17 5.69997C12.71 5.47997 11.26 5.47997 9.83001 5.69997C9.69001 5.36997 9.49001 4.95997 9.32001 4.65997C7.94001 4.89997 6.63001 5.31997 5.40001 5.88997C2.92001 9.62997 2.25001 13.28 2.58001 16.87C4.23001 18.1 5.82001 18.84 7.39001 19.33C7.78001 18.8 8.12001 18.23 8.42001 17.64C7.85001 17.43 7.31001 17.16 6.80001 16.85C6.94001 16.75 7.07001 16.64 7.20001 16.54C10.33 18 13.72 18 16.81 16.54C16.94 16.65 17.07 16.75 17.21 16.85C16.7 17.16 16.15 17.42 15.59 17.64C15.89 18.23 16.23 18.8 16.62 19.33C18.19 18.84 19.79 18.1 21.43 16.87C21.82 12.7 20.76 9.08997 18.61 5.88997H18.59ZM8.84001 14.67C7.90001 14.67 7.13001 13.8 7.13001 12.73C7.13001 11.66 7.88001 10.79 8.84001 10.79C9.80001 10.79 10.56 11.66 10.55 12.73C10.55 13.79 9.80001 14.67 8.84001 14.67ZM15.15 14.67C14.21 14.67 13.44 13.8 13.44 12.73C13.44 11.66 14.19 10.79 15.15 10.79C16.11 10.79 16.87 11.66 16.86 12.73C16.86 13.79 16.11 14.67 15.15 14.67Z" fill="#b89470"/>
+                        </svg>
                     </a>
-                    <a href="#" class="card card-fixed card-hoverable link">
-                        <img src="social_icon_5.png" alt="Social Media 5" width="32" height="32">
-                        <div class="link__glow"></div>
+                        </div>
+
+                        <div class="buttons links-category" id="contactsButtons" data-category="contacts">
+                                                <a href="https://t.me/mettanekochka" class="card card-fixed link">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" id="MyRect">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M24 12C24 18.6274 18.6274 24 12 24C5.37258 24 0 18.6274 0 12C0 5.37258 5.37258 0 12 0C18.6274 0 24 5.37258 24 12ZM12.43 8.85893C11.2629 9.3444 8.93015 10.3492 5.43191 11.8733C4.86385 12.0992 4.56628 12.3202 4.53919 12.5363C4.4934 12.9015 4.95073 13.0453 5.57349 13.2411C5.6582 13.2678 5.74598 13.2954 5.83596 13.3246C6.44866 13.5238 7.27284 13.7568 7.70131 13.766C8.08996 13.7744 8.52375 13.6142 9.00266 13.2853C12.2712 11.079 13.9584 9.96381 14.0643 9.93977C14.1391 9.92281 14.2426 9.90148 14.3128 9.96385C14.3829 10.0262 14.3761 10.1443 14.3686 10.176C14.3233 10.3691 12.5281 12.0381 11.5991 12.9018C11.3095 13.171 11.1041 13.362 11.0621 13.4056C10.968 13.5034 10.8721 13.5958 10.78 13.6846C10.2108 14.2333 9.78393 14.6448 10.8036 15.3168C11.2937 15.6397 11.6858 15.9067 12.077 16.1731C12.5042 16.4641 12.9303 16.7543 13.4816 17.1157C13.6221 17.2078 13.7562 17.3034 13.8869 17.3965C14.3841 17.751 14.8308 18.0694 15.3826 18.0186C15.7033 17.9891 16.0345 17.6876 16.2027 16.7884C16.6002 14.6632 17.3816 10.0585 17.5622 8.16098C17.5781 7.99473 17.5582 7.78197 17.5422 7.68858C17.5262 7.59518 17.4928 7.46211 17.3714 7.3636C17.2276 7.24694 17.0057 7.22234 16.9064 7.22408C16.455 7.23204 15.7626 7.47282 12.43 8.85893Z" fill="#b89470"/>
+                        </svg>
                     </a>
-                    <a href="#" class="card card-fixed card-hoverable link">
-                        <img src="social_icon_6.png" alt="Social Media 6" width="32" height="32">
-                        <div class="link__glow"></div>
+                    <a href="https://discord.gg/askydVhwJ3" class="card card-fixed link">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18.59 5.88997C17.36 5.31997 16.05 4.89997 14.67 4.65997C14.5 4.95997 14.3 5.36997 14.17 5.69997C12.71 5.47997 11.26 5.47997 9.83001 5.69997C9.69001 5.36997 9.49001 4.95997 9.32001 4.65997C7.94001 4.89997 6.63001 5.31997 5.40001 5.88997C2.92001 9.62997 2.25001 13.28 2.58001 16.87C4.23001 18.1 5.82001 18.84 7.39001 19.33C7.78001 18.8 8.12001 18.23 8.42001 17.64C7.85001 17.43 7.31001 17.16 6.80001 16.85C6.94001 16.75 7.07001 16.64 7.20001 16.54C10.33 18 13.72 18 16.81 16.54C16.94 16.65 17.07 16.75 17.21 16.85C16.7 17.16 16.15 17.42 15.59 17.64C15.89 18.23 16.23 18.8 16.62 19.33C18.19 18.84 19.79 18.1 21.43 16.87C21.82 12.7 20.76 9.08997 18.61 5.88997H18.59ZM8.84001 14.67C7.90001 14.67 7.13001 13.8 7.13001 12.73C7.13001 11.66 7.88001 10.79 8.84001 10.79C9.80001 10.79 10.56 11.66 10.55 12.73C10.55 13.79 9.80001 14.67 8.84001 14.67ZM15.15 14.67C14.21 14.67 13.44 13.8 13.44 12.73C13.44 11.66 14.19 10.79 15.15 10.79C16.11 10.79 16.87 11.66 16.86 12.73C16.86 13.79 16.11 14.67 15.15 14.67Z" fill="#b89470"/>
+                        </svg>
                     </a>
+                        </div>
+                        <div class="buttons links-category" id="donateButtons" data-category="donate">
+                            <a href="https://boosty.to/mattywright" class="card card-fixed link" target="_blank">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24"><path fill="#b89470" d="M2.661 14.337L6.801 0h6.362L11.88 4.444l-.038.077l-3.378 11.733h3.15q-1.982 4.934-3.086 7.733c-5.816-.063-7.442-4.228-6.02-9.155M8.554 24l7.67-11.035h-3.25l2.83-7.073c4.852.508 7.137 4.33 5.791 8.952C20.16 19.81 14.344 24 8.68 24h-.127z"/></svg>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </section>
 
-            <section class="webring-container">
+            <!--<section class="webring-container">
                 <div class="webring card card-subtle">
                     <a href="#" class="webring__button">&lt; dsair</a>
                     <p>WEBRING</p>
                     <a href="#" class="webring__button">jsopn &gt;</a>
                 </div>
-            </section>
+            </section>-->
         </main>
-
-        <footer>
-            </footer>
+        <footer></footer>
     </div>
     <script src="js/script.js"></script>
     <script src="js/lastfm.js"></script>
     <script src="js/steam_stats_v2.js"></script>
+    <script src="js/age_counter.js"></script>
 </body>
 </html>

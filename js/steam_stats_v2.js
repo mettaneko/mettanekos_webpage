@@ -59,9 +59,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Если данных о играх нет (например, профиль приватный, или нет недавно сыгранных игр)
                     console.log("Нет данных о недавно сыгранных играх Steam. Профиль приватный или нет игр за последние 2 недели.");
                     // Устанавливаем заглушки
-                    gameNameElement.textContent = 'Нет данных о играх';
+                    gameNameElement.textContent = 'NO DATA';
                     gamePlatformElement.textContent = '';
-                    gameCoverElement.src = 'assets/placeholder-game.png'; // Убедитесь, что у вас есть такая заглушка
+                    gameCoverElement.src = 'assets/on_off.png'; // Убедитесь, что у вас есть такая заглушка
                     gameHoursElement.textContent = '';
                     gameHoursTextElement.textContent = '';
                 }
@@ -70,9 +70,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Обработка любых ошибок, возникших при запросе или обработке данных
                 console.error('Ошибка при получении данных Steam через прокси:', error);
                 // Устанавливаем заглушки при ошибке
-                gameNameElement.textContent = 'Ошибка загрузки игр';
+                gameNameElement.textContent = 'Failed to load Steam';
                 gamePlatformElement.textContent = '';
-                gameCoverElement.src = 'assets/placeholder-game.png';
+                gameCoverElement.src = 'assets/on_off.png';
                 gameHoursElement.textContent = '';
                 gameHoursTextElement.textContent = '';
             });

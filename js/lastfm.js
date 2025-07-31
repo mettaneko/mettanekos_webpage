@@ -56,9 +56,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 } else {
                     console.log("Нет данных о последних треках. Возможно, пользователь ничего не слушал или API вернул пустой ответ.");
-                    songNameElement.textContent = 'Нет данных о музыке';
+                    songNameElement.textContent = 'NO DATA';
                     artistNameElement.textContent = '';
-                    albumCoverElement.src = 'placeholder-album.png'; // Заглушка
                     playsTextElement.textContent = '';
                     playsCountElement.textContent = '';
                     MUSIC_STATS_ELEMENT.classList.remove('now-playing');
@@ -66,9 +65,8 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .catch(error => {
                 console.error('Ошибка при получении данных Last.fm:', error);
-                songNameElement.textContent = 'Ошибка загрузки музыки';
+                songNameElement.textContent = 'Failed to load Last.Fm';
                 artistNameElement.textContent = '';
-                albumCoverElement.src = 'placeholder-album.png'; // Заглушка
                 playsTextElement.textContent = '';
                 playsCountElement.textContent = '';
                 MUSIC_STATS_ELEMENT.classList.remove('now-playing');

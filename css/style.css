@@ -9,8 +9,8 @@
     --y2k-gradient-1: linear-gradient(135deg, #e6b88b 0%, #d4a06d 100%); /* Градиент в теплых коричневых тонах */
     --y2k-gradient-2: linear-gradient(45deg, #e6b88b 0%, #d4a06d 50%, #e6b88b 100%); /* Градиент в теплых коричневых тонах */
     --y2k-gradient-3: linear-gradient(to right, #e6b88b, #d4a06d); /* Градиент в теплых коричневых тонах */
-    --main-font: "VT323", monospace;
-    --heading-font: "VT323", "Montserrat", monospace;
+    --main-font: "Tiny5", sans-serif;
+    --heading-font: "VT323", "Manrope", monospace;
     --inter-font: "Inter", sans-serif;
     --slide-spacing: 1rem;
     --slide-size: 100%;
@@ -32,6 +32,53 @@
 .song.now-playing .song-info__name {
     color: var(--text-active-color); /* Например, выделить цветом */
     /* text-shadow: 0 0 5px var(--text-active-color); */ /* Или добавить свечение */
+}
+.MyRect {
+  fill: #b89470;
+}
+
+/* links-section selector buttons */
+
+/* Контейнер для всех групп кнопок, обрезает содержимое */
+.links-content-wrapper {
+    position: relative;
+    overflow: hidden; /* Важно: скрывает "выезжающие" категории */
+    min-height: 200px; /* !!! Установите фиксированную минимальную высоту. Подберите значение !!! */
+    /* transition: height 0.3s ease-out; /* Эту строку удаляем, так как высота не будет анимироваться */
+}
+
+/* Внутренний контейнер, который будет двигаться */
+.links-content-inner {
+    display: flex; /* Размещает все категории в ряд */
+    transition: transform 0.4s ease-in-out; /* Анимация перемещения */
+    will-change: transform; /* Оптимизация для анимации */
+}
+
+/* Каждая категория кнопок */
+.links-category {
+    flex-shrink: 0; /* Категории не будут сжиматься */
+    width: 100%; /* Каждая категория занимает 100% ширины */
+    display: flex; /* Ваши существующие стили для кнопок внутри */
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 0; /* Убедитесь, что нет лишних отступов */
+}
+
+/* Медиа-запросы для ссылок внутри category */
+@media only screen and (max-width: 850px) {
+    .links-category {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 12px;
+    }
+}
+
+@media only screen and (max-width: 450px) {
+    .links-category {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 8px;
+    }
 }
 
 .song.now-playing .plays-text {
@@ -117,7 +164,7 @@ a {
 }
 
 a:hover {
-    color: var(--text-active-color);
+    color: var(--text--color);
 }
 
 select {
@@ -184,7 +231,6 @@ header { /* Изначально header.svelte-witepv */
 
 footer { /* Изначально footer.svelte-1qqnmff */
     padding: 16px 0;
-    border-top: 1px solid rgba(255, 255, 255, .1);
 }
 
 section { /* Изначально section.svelte-witepv */
@@ -195,7 +241,6 @@ section { /* Изначально section.svelte-witepv */
 section h2 { /* Изначально section.svelte-witepv h2 */
     font-size: 24px;
     font-weight: 600;
-    margin-bottom: 32px;
     color: var(--text-primary-color);
 }
 
@@ -266,7 +311,6 @@ section h2 { /* Изначально section.svelte-witepv h2 */
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, .1);
     background: linear-gradient(135deg, rgba(255, 255, 255, .05) 0%, rgba(255, 255, 255, .02) 100%);
-    box-shadow: 0 8px 32px #0000001a;
 }
 
 .card-subtle { /* Изначально .card-subtle.svelte-1w9lwcw */
@@ -280,7 +324,6 @@ section h2 { /* Изначально section.svelte-witepv h2 */
     -webkit-backdrop-filter: blur(15px);
     backdrop-filter: blur(15px);
     background: linear-gradient(135deg, rgba(255, 255, 255, .08) 0%, rgba(255, 255, 255, .03) 100%);
-    box-shadow: 0 8px 32px #0003, 0 0 0 1px #ffffff26;
 }
 
 .card-max-width { /* Изначально .card-max-width.svelte-1w9lwcw */
@@ -307,8 +350,6 @@ section h2 { /* Изначально section.svelte-witepv h2 */
 
 .card-hoverable:hover { /* Изначально .card-hoverable.svelte-1w9lwcw:hover */
     transform: translateY(-2px);
-    border-color: #fff3;
-    box-shadow: 0 10px 40px #0003;
 }
 
 .card-centered { /* Изначально .card-centered.svelte-1w9lwcw */
@@ -339,7 +380,14 @@ section h2 { /* Изначально section.svelte-witepv h2 */
     flex-direction: column;
     gap: 20px;
 }
-
+.hero__sidebar>img{
+    background: rgba(255, 255, 255, .05);
+    border: 1px solid rgba(255, 255, 255, .1);
+    border-radius: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
 .avatar { /* Изначально .avatar.svelte-4chmsb */
     width: 100%;
     height: auto;
@@ -409,7 +457,9 @@ h2 { /* Изначально h2.svelte-4chmsb и h2.svelte-187spwm (и section h
     color: var(--text-primary-color); /* Дублируется в section h2 */
     letter-spacing: 2px; /* Из h2.svelte-4chmsb */
 }
-
+.hobbies{
+        margin-bottom: 0px;
+}
 .roles-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr); /* Изменено для двух колонок */
@@ -722,12 +772,12 @@ h2 { /* Изначально h2.svelte-4chmsb и h2.svelte-187spwm (и section h
 .link img { /* Изначально img.svelte-1r5pox7 */
     object-fit: contain;
     transition: all .3s cubic-bezier(.4, 0, .2, 1);
-    filter: brightness(.95) drop-shadow(0 2px 4px rgba(0, 0, 0, .1));
+
     z-index: 1;
 }
 
 .card:hover .link img { /* Изначально .card:hover img.svelte-1r5pox7 */
-    filter: brightness(1) drop-shadow(0 4px 8px rgba(0, 0, 0, .2));
+
     transform: scale(1.05) translateY(-2px);
 }
 
@@ -758,7 +808,6 @@ h2 { /* Изначально h2.svelte-4chmsb и h2.svelte-187spwm (и section h
     height: 2px;
     bottom: -4px;
     left: 0;
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, .5) 50%, rgba(255, 255, 255, 0) 100%);
     transform: scaleX(0);
     transition: transform .3s cubic-bezier(.4, 0, .2, 1);
 }
