@@ -21,9 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Функция для получения недавно сыгранных игр
     function fetchSteamRecentGames() {
-        // !!! ОЧЕНЬ ВАЖНО: Замените 'https://ВАШЕ_ИМЯ_ПРОЕКТА.vercel.app' на РЕАЛЬНЫЙ URL вашего развернутого прокси-сервера на Vercel !!!
-        // Например: 'https://mettaneko-steam-proxy-xyz123.vercel.app/api/steam/recent-games'
-        const vercelProxyUrl = 'https://mettaneko-steam-proxy-50o1j80pc-mettanekos-projects.vercel.app/api/steam/recent-games'; 
+        const vercelProxyUrl = 'https://mettaneko-steam-proxy.vercel.app/api/steam/recent-games'; 
 
         // Выполняем запрос к вашему Vercel прокси-серверу
         fetch(vercelProxyUrl)
