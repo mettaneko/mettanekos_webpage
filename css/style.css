@@ -1,14 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Bytesized&family=Press+Start+2P&family=Micro+5&family=Jersey+10&family=Tiny5&Inter:wght@300;400;500;600;700&family=Manrope:wght@800&display=swap');
 :root {
-    --bg-color: #1e1710; /* Очень темный, насыщенный коричневый фон */
-    --text-primary-color: #ffffff;
-    --text-secondary-color: #c4b6a5; /* Светло-коричневый/кремовый для вторичного текста */
-    --text-active-color: #d4a06d; /* Насыщенный терракотовый или теплый оранжево-коричневый для активных элементов */
-    --text-now-color: #d46d6d; /* Насыщенный терракотовый или теплый оранжево-коричневый для активных элементов */
-    --text-link-color: #e6b88b; /* Более светлый теплый коричневый для ссылок */
-    --y2k-gradient-1: linear-gradient(135deg, #e6b88b 0%, #d4a06d 100%); /* Градиент в теплых коричневых тонах */
-    --y2k-gradient-2: linear-gradient(45deg, #e6b88b 0%, #d4a06d 50%, #e6b88b 100%); /* Градиент в теплых коричневых тонах */
-    --y2k-gradient-3: linear-gradient(to right, #e6b88b, #d4a06d); /* Градиент в теплых коричневых тонах */
+    --bg-color: rgba(62, 35, 109,1); /* Очень темный, насыщенный пурпурный фон */
+    --text-primary-color: #ddc0ff;
+    --text-inter-color: #ffffff;
+    --text-secondary-color: #b5a5c4; /* Светло-пурпурный/лиловый для вторичного текста */
+    --text-active-color: #9d6dd4; /* Насыщенный пурпурный для активных элементов */
+    --text-now-color: #a77eff; /* Насыщенный пурпурно-зеленый для активных элементов */
+    --text-link-color: #a88be6; /* Более светлый пурпурный для ссылок */
+    --y2k-gradient-1: linear-gradient(135deg, #a88be6 0%, #9d6dd4 100%); /* Градиент в пурпурных тонах */
+    --y2k-gradient-2: linear-gradient(45deg, #a88be6 0%, #9d6dd4 50%, #a88be6 100%); /* Градиент в пурпурных тонах */
+    --y2k-gradient-3: linear-gradient(to right, #a88be6, #9d6dd4); /* Градиент в пурпурных тонах */
     --main-font: "Tiny5", sans-serif;
     --heading-font: "VT323", "Manrope", monospace;
     --inter-font: "Inter", sans-serif;
@@ -16,8 +17,22 @@
     --slide-size: 100%;
     --slide-height: 19rem;
 }
-
-
+body {
+    background-image: url('http://googleusercontent.com/image_generation_content/0');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    
+    /* Другие стили, которые у вас уже могут быть */
+    margin: 0;
+    font-family: var(--main-font);
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 /* Общие сбросы и базовые стили */
 * {
     box-sizing: border-box;
@@ -112,17 +127,91 @@ html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
+/* Общие стили для изображений в кнопках */
+.links-category a img {
+    width: 100%; /* Картинка занимает всю ширину кнопки */
+    height: 100%; /* Картинка занимает всю высоту кнопки */
+    object-fit: cover; /* Это важно: картинка будет заполнять всю область, не растягиваясь */
+    border-radius: 24px; /* Немного закругляем углы */
+    
+}
+
+/* Стили для кнопки, если она просто содержит картинку */
+.links-category a.card {
+    padding: 0; /* Убираем внутренние отступы, чтобы картинка занимала всю площадь */
+    border-radius: 12px; /* Закругляем углы самой карточки */
+    overflow: hidden; /* Обрезаем всё, что выходит за границы, включая картинку с закругленными углами */
+    display: flex; /* Важно для центрирования и размещения содержимого */
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    margin: 5px;
+}
+
+
+/* Универсальное ограничение для всех карточек в категории "MY PROJECTS" */
+/* Этот класс `links-category` позволяет нам быть уверенными, что мы стилизуем только кнопки в этом разделе. */
+.links-category .card {
+    width: 200px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px; /* Убираем стандартные отступы, чтобы картинка занимала всю площадь */
+    overflow: hidden; /* Обрезаем все, что выходит за границы */
+
+}
+
+/* Правила для изображений внутри этих карточек */
+.links-category .card img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* Картинка будет вписываться в рамки, сохраняя пропорции */
+}
+
+/* Ограничение размера кнопки */
+.project-button-with-image {
+    width: 200px;  /* Задаем ширину кнопки */
+    height: 60px; /* Задаем высоту кнопки */
+    padding: 0px;   /* Убираем внутренние отступы, чтобы картинка занимала всю площадь */
+    display: flex; /* Используем flexbox для центрирования содержимого */
+    align-items: center;
+    justify-content: center;
+    overflow: hidden; /* Обрезаем все, что выходит за границы */
+}
+
+.project-button-with-image h3{
+    font-size: 28px;
+}
+
+/* Ограничение размера картинки внутри кнопки */
+.project-button-with-image img {
+    max-width: 100%;   /* Максимальная ширина 100% от родителя (кнопки) */
+    max-height: 100%;  /* Максимальная высота 100% от родителя (кнопки) */
+    object-fit: contain; /* Картинка будет вписываться в рамки, сохраняя пропорции */
+}
 
 .project-title {
     font-family: var(--inter-font);
     font-weight: 600px;
     font-size: 2.5em; /* Сохраняем существующий размер */
-    color: var(--text-primary-color); /* Сохраняем существующий цвет */
+    color: var(--text-inter-color); /* Сохраняем существующий цвет */
     text-align: center; /* Центрируем текст */
-    /* Дополнительные стили, если были */
+
 }
-
-
+#ageCounter{
+    align-self: center;
+}
+.role-title{
+    align-items: center;
+    align-self: center;
+    justify-content: center;
+}
+.project-title img {
+    display: block; /* Убираем лишние отступы, характерные для inline-элементов */
+    max-width: 80%;     /* Картинка занимает 80% от ширины родителя */
+    margin: 0 auto; /* Автоматически центрируем картинку по горизонтали */
+}
 body {
     background-color: var(--bg-color);
     position: relative;
@@ -333,7 +422,8 @@ section h2 { /* Изначально section.svelte-witepv h2 */
 .card-fixed { /* Изначально .card-fixed.svelte-1w9lwcw */
     width: 380px;
     max-width: 100%;
-    max-height: none; /* Убрано min-height, так как оно в медиа-запросах */
+    max-height: none;
+    transition: all 0.3s ease-in-out; /* Убрано min-height, так как оно в медиа-запросах */
 }
 
 .card-block { /* Изначально .card-block.svelte-1w9lwcw */
@@ -371,10 +461,22 @@ section h2 { /* Изначально section.svelte-witepv h2 */
     gap: 20px;
 }
 
+.project-title img {
+    display: block; /* Убираем лишние отступы, характерные для inline-элементов */
+    max-width: 40%;     /* Картинка занимает 80% от ширины родителя */
+    margin: 0 auto; /* Автоматически центрируем картинку по горизонтали */
+}
+
+/* Если вам нужен отступ сверху и снизу, добавьте его так: */
+.project-title {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
 .profile-card { /* Изначально .profile-card.svelte-4chmsb */
     background: rgba(255, 255, 255, .05);
     border: 1px solid rgba(255, 255, 255, .1);
-    border-radius: 8px;
+    border-radius: 24px;
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -391,7 +493,7 @@ section h2 { /* Изначально section.svelte-witepv h2 */
 .avatar { /* Изначально .avatar.svelte-4chmsb */
     width: 100%;
     height: auto;
-    border-radius: 8px;
+    border-radius: 24px;
     border: 2px solid rgba(255, 255, 255, .1);
 }
 
@@ -406,6 +508,7 @@ section h2 { /* Изначально section.svelte-witepv h2 */
     display: flex;
     flex-direction: column;
     gap: 4px;
+    align-items:baseline;
 }
 
 .stat-label { /* Изначально .stat-label.svelte-4chmsb и .stat-label.svelte-gwv9hv */
@@ -414,6 +517,7 @@ section h2 { /* Изначально section.svelte-witepv h2 */
     color: var(--text-secondary-color);
     letter-spacing: 1px;
     opacity: .8; /* Из .stat-label.svelte-gwv9hv */
+    align-items:center;
 }
 
 .stat-value { /* Изначально .stat-value.svelte-4chmsb */
@@ -469,7 +573,7 @@ h2 { /* Изначально h2.svelte-4chmsb и h2.svelte-187spwm (и section h
 .role-card { /* Изначально .role-card.svelte-4chmsb */
     background: rgba(255, 255, 255, .05);
     border: 1px solid rgba(255, 255, 255, .1);
-    border-radius: 8px;
+    border-radius: 24px;
     padding: 20px;
     text-align: center;
     transition: all .3s ease;
@@ -491,7 +595,7 @@ h2 { /* Изначально h2.svelte-4chmsb и h2.svelte-187spwm (и section h
 .project-card { /* Изначально .project-card.svelte-4chmsb */
     background: rgba(255, 255, 255, .05);
     border: 1px solid rgba(255, 255, 255, .1);
-    border-radius: 8px;
+    border-radius: 24px;
     padding: 20px;
     display: block;
     transition: all .3s cubic-bezier(.4, 0, .2, 1);
@@ -509,7 +613,17 @@ h2 { /* Изначально h2.svelte-4chmsb и h2.svelte-187spwm (и section h
     transition: transform .3s cubic-bezier(.4, 0, .2, 1);
 }
 
+.project-card { /* Изначально .project-card.svelte-4chmsb img */
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform .3s cubic-bezier(.4, 0, .2, 1);
+}
+
 .project-card:hover img { /* Изначально .project-card.svelte-4chmsb:hover img */
+    transform: scale(1.02);
+}
+.project-card:hover { /* Изначально .project-card.svelte-4chmsb:hover img */
     transform: scale(1.02);
 }
 
@@ -872,6 +986,10 @@ h2 { /* Изначально h2.svelte-4chmsb и h2.svelte-187spwm (и section h
     gap: 16px;
     flex-wrap: wrap;
     justify-content: center;
+}
+
+.card-fixed:hover { /* Изначально .buttons.svelte-xheki */
+    transform: scale(1.05);
 }
 
 /* Стили для счетчика посещений */

@@ -45,7 +45,34 @@ document.addEventListener('DOMContentLoaded', () => {
                 setTimeout(updateWrapperHeight, 100); // Можно поиграться с этим значением
             }
         }
+        const selector = document.getElementById('linksSelector');
+    const linksContentInner = document.querySelector('.links-content-inner');
+    const categories = Array.from(document.querySelectorAll('.links-category'));
+
+    let currentActiveCategoryIndex = 0;
+
+    selector.addEventListener('click', (event) => {
+        event.preventDefault();
+        const targetLink = event.target.closest('a');
+
+        if (targetLink && !targetLink.classList.contains('active')) {
+            const targetCategoryName = targetLink.dataset.target;
+            const newCategory = document.getElementById(`${targetCategoryName}Buttons`);
+            const newCategoryIndex = categories.indexOf(newCategory);
+
+            if (newCategoryIndex !== -1 && newCategoryIndex !== currentActiveCategoryIndex) {
+                selector.querySelectorAll('a').forEach(link => link.classList.remove('active'));
+                targetLink.classList.add('active');
+
+                linksContentInner.style.transform = `translateX(-${newCategoryIndex * 100}%)`;
+
+                currentActiveCategoryIndex = newCategoryIndex;
+            }
+        }
     });
+    
+    });
+
 });
    
    
