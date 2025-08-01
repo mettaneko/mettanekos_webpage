@@ -2,12 +2,11 @@
 
 :root {
     --text-color: #f3f4f6;
-    --background-color: #33272c;
-    --card-background: #412d35;
-    --accent-color: #f592b6;
-    --webring-color: #ffb2ce;
-    --gray-text-color: #db85b7;
-    --border-color: #e5e7eb;
+    --background-color: rgba(62, 35, 109,1);
+    --card-background: rgba(255, 255, 255,0.1);
+    --accent-color: rgb(163, 110, 255);
+    --webring-color: rgb(190, 152, 255);
+    --gray-text-color: rgb(163, 110, 255);
     --radius-3xl: 1.5rem;
     --font-sans: "Manrope", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
     --font-title: "Manrope", sans-serif;
@@ -120,9 +119,7 @@ a {
     color: var(--webring-color);
 }
 
-.profile-card {
-    /* Наследует стили от .main-card */
-}
+
 
 .profile-header {
     display: flex;
@@ -202,10 +199,6 @@ a {
     transform: translateY(-2px);
 }
 
-.projects-card {
-    /* Наследует стили от .main-card */
-}
-
 .projects-list {
     display: flex;
     flex-direction: column;
@@ -266,9 +259,6 @@ a {
     text-decoration-color: var(--accent-color);
 }
 
-.languages-card {
-    /* Наследует стили от .main-card */
-}
 
 .language-grid {
     display: flex;
@@ -317,9 +307,7 @@ a {
     color: var(--accent-color);
 }
 
-.stats-card {
-    /* Наследует стили от .main-card */
-}
+
 
 /* Новый класс для статистики */
 .stats-content-wrapper {
