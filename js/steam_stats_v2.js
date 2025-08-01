@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const gamePlatformElement = GAME_STATS_ELEMENT.querySelector('.game-info__platform');
     const gameCoverElement = GAME_STATS_ELEMENT.querySelector('.game-cover img');
     const gameHoursElement = GAME_STATS_ELEMENT.querySelector('.hours');
-    const gameHoursTextElement = GAME_STATS_ELEMENT.querySelector('.hours-text');
     
     // Функция для получения недавно сыгранных игр
     function fetchSteamRecentGames() {
@@ -52,9 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     gameCoverElement.src = gameCoverUrl;
                     gameNameElement.textContent = gameName;
                     gamePlatformElement.textContent = 'Steam'; // Платформа всегда Steam
-                    gameHoursElement.textContent = playtimeHours;
-                    gameHoursTextElement.textContent = 'HOURS (2 WEEKS)';
-
+                    gameHoursElement.textContent = '● '+playtimeHours+' H';
                 } else {
                     // Если данных о играх нет (например, профиль приватный, или нет недавно сыгранных игр)
                     console.log("Нет данных о недавно сыгранных играх Steam. Профиль приватный или нет игр за последние 2 недели.");
@@ -63,7 +60,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     gamePlatformElement.textContent = '';
                     gameCoverElement.src = 'assets/on_off.png'; // Убедитесь, что у вас есть такая заглушка
                     gameHoursElement.textContent = '';
-                    gameHoursTextElement.textContent = '';
                 }
             })
             .catch(error => {
