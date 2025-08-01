@@ -36,12 +36,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     const isNowPlaying = track['@attr'] && track['@attr'].nowplaying === 'true';
 
                     if (isNowPlaying) {
-                        playsTextElement.textContent = 'NOW';
+                        playsTextElement.textContent = '● Now';
                         playsCountElement.textContent = ''; // Очищаем количество прослушиваний, если трек играет
                         // Можно добавить анимацию или специальный стиль для "сейчас играет"
                         MUSIC_STATS_ELEMENT.classList.add('now-playing');
                     } else {
-                        playsTextElement.textContent = 'RECENTLY';
+                        playsTextElement.textContent = '● Last';
                         // Для 'СЛУШАЛ' можно показать время, прошедшее с момента прослушивания,
                         // или количество прослушиваний, если вы используете getTopTracks.
                         // Если это просто последний трек и нет информации о playcount, можно оставить пустым
