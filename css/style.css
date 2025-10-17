@@ -787,7 +787,19 @@ a {
     }
 
     .page-container {
-        transform: translateY(30px);
+        transform: translateY(29px);
+        
+    }
+}
+
+@media (max-width: 420px) {
+    body {
+        overflow-x: hidden; /* отключает горизонтальный скролл */
+  overflow-y: hidden; /* включает вертикальный скролл */
+    }
+
+    .page-container {
+        transform: translateY(29px);
         
     }
 }
