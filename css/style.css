@@ -856,3 +856,23 @@ a {
         height: 8rem;
     }
 }
+
+/* По умолчанию показываем иконку "включен" */
+.volume-icon.volume-on {
+    display: block; 
+}
+/* По умолчанию скрываем иконку "выключен" */
+.volume-icon.volume-off {
+    display: none; 
+}
+
+/* Когда кнопка имеет класс 'is-muted' (звук выключен): */
+.volume-btn.is-muted .volume-icon.volume-on {
+    display: none; /* Скрываем "включен" */
+}
+
+.volume-btn.is-muted .volume-icon.volume-off {
+    display: block; /* Показываем "выключен" */
+}
+
+/* ... (Остальной ваш CSS) ... */
