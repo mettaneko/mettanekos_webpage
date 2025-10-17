@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         } else {
             // Значение по умолчанию - звук выключен
-            bgVideo.muted = true;
+            bgVideo.muted = false;
             volumeCard.classList.add('volume-muted');
             
             // Показываем анимацию для нового пользователя
