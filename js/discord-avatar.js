@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     const discordAvatar = document.getElementById('discordAvatar');
-    // Используй URL твоей Vercel Function
-    // Vercel Function теперь возвращает само изображение (MIME-тип image/png)
+    // Обновите URL на ваш актуальный домен Vercel
     const API_URL = 'https://mettaneko-steam-proxy.vercel.app/api/discord-avatar'; 
 
     async function loadDiscordAvatar() {
@@ -9,23 +8,22 @@ document.addEventListener('DOMContentLoaded', function() {
             const response = await fetch(API_URL);
             
             if (!response.ok) {
-                // Если статус не 200, возможно, это ошибка JSON
+                // Если статус не 200, читаем JSON для ошибки
                 const errorData = await response.json().catch(() => ({ error: 'Unknown API Error' }));
                 throw new Error('API request failed: ' + (errorData.error || response.statusText));
             }
 
-            // Получаем ответ в виде Blob (двоичные данные)
-            const imageBlob = await response.blob(); 
+            // Получаем JSON со ссылкой
+            const data = await response.json(); 
             
-            // Создаем локальный URL для Blob, который можно использовать в src тега <img>
-            const imageUrl = URL.createObjectURL(imageBlob); 
-            
-            discordAvatar.src = imageUrl;
-            console.log('Discord аватар загружен (через конвертацию в PNG):', imageUrl);
-            
+            if (data.avatarUrl) {
+                discordAvatar.src = data.avatarUrl;
+                console.log('Discord аватар загружен:', data.avatarUrl);
+                return;
+            }
         } catch (error) {
             console.error('Ошибка при загрузке Discord аватара:', error);
-            // В случае ошибки, скрыть или показать стандартный аватар
+            // В случае ошибки, скрыть аватар
             discordAvatar.style.display = 'none';
         }
     }
