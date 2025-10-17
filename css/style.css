@@ -784,7 +784,12 @@ a {
     body {
         overflow-x: hidden; /* отключает горизонтальный скролл */
   overflow-y: hidden; /* включает вертикальный скролл */
-        }
+    }
+
+    .page-container {
+        transform: translateY(-7.5%);
+        
+    }
 }
 
 @media (max-width: 420px) {
