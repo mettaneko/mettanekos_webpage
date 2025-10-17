@@ -1,17 +1,106 @@
 @import url('https://fonts.googleapis.com/css2?family=Bytesized&family=Press+Start+2P&family=Micro+5&family=Jersey+10&family=Tiny5&Inter:wght@300;400;500;600;700&family=Manrope:wght@800&display=swap');
 
 :root {
-    --text-color: #f3f4f6;
-    --background-color: rgba(62, 35, 109,1);
-    --card-background: rgba(255, 255, 255,0.1);
-    --accent-color: rgb(163, 110, 255);
-    --webring-color: rgb(190, 152, 255);
-    --gray-text-color: rgb(163, 110, 255);
+    --text-color: rgb(222, 216, 255);
+    --background-color: rgb(255, 255, 255);
+    --card-background: rgba(169, 149, 255, 0.1);
+    --accent-color: rgb(169, 149, 255);
+    --webring-color: rgb(169, 149, 255);
+    --gray-text-color: rgb(177, 162, 248);
+    --play-badge: rgb(90, 78, 151);
     --radius-3xl: 1.5rem;
     --font-sans: "Manrope", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
     --font-title: "Manrope", sans-serif;
+    overflow: hidden;
+    -ms-user-select: none; 
+		-moz-user-select: none; 
+		-webkit-user-select: none; 
+		user-select: none; 
+}
+/* Фоновое видео */
+.video-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    overflow: hidden;
 }
 
+#bgVideo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: blur(20px) brightness(0.7);
+    transition: all 0.6s ease-in-out;
+    transform: scale(1.1);
+}
+
+/* Overlay для видео */
+.video-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(121, 100, 98, 0.6);
+    transition: all 0.6s ease-in-out;
+    z-index: -1;
+}
+
+/* Эффект при наведении на body - видео становится четким */
+body:hover #bgVideo {
+    filter: blur(0px) brightness(1);
+    transform: scale(1);
+}
+
+body:hover .video-overlay {
+    background-color: rgba(121, 100, 98, 0.3);
+}
+
+body {
+    margin: 0;
+    font-family: var(--font-sans);
+    color: var(--text-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 1rem;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Остальные стили остаются без изменений */
+*, ::before, ::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+img, svg {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.page-container {
+    max-width: 80rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    min-height: 100vh;
+}
+/* Базовые стили для body */
 body {
     margin: 0;
     font-family: var(--font-sans);
@@ -22,7 +111,137 @@ body {
     align-items: center;
     min-height: 100vh;
     padding: 1rem;
+    position: relative;
+    overflow-x: hidden;
 }
+
+
+/* Overlay */
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    transition: all 0.6s ease-in-out;
+    z-index: -1;
+    
+}
+
+/* Эффект при наведении на body - фон становится четким */
+body:hover::before {
+    filter: blur(0px) brightness(1);
+    transform: scale(1);
+}
+
+/* Основные карточки с размытием и тенями */
+.main-card {
+    padding: 1.5rem 1rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-3xl);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.1s ease-in-out;
+
+
+}
+
+/* Webring с размытием и тенями */
+.webring-content {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--gray-text-color);
+    text-align: center;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-3xl);
+    font-family: monospace;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 14rem;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.1s ease-in-out;
+}
+
+/* Карточки проектов с тенями */
+.project-card {
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 1.5rem;
+    border-radius: var(--radius-3xl);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    transition: all 0.1s ease-in-out;
+    position: relative;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+
+}
+
+.project-card:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+
+}
+
+/* Элементы языков с тенями */
+.language-item {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--gray-text-color);
+    padding: 0.75rem;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.1s ease-in-out;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.language-item:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: var(--accent-color);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transform: translateY(-1px);
+    
+    
+}
+
+/* Улучшаем читаемость текста на размытом фоне */
+
+
+/* Адаптация для больших экранов */
+body {
+    margin: 0;
+    font-family: var(--font-sans);
+    color: var(--text-color);
+    /* Убираем старый background-color */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 1rem;
+    position: relative;
+    
+}
+
 
 *, ::before, ::after {
     box-sizing: border-box;
@@ -190,7 +409,7 @@ a {
     font-size: 0.875rem;
     line-height: 1.25rem;
     border: 1px solid var(--border-color);
-    transition: all 0.3s ease-in-out;
+    transition: all 0.1s ease-in-out;
 }
 
 .social-link:hover {
@@ -222,7 +441,7 @@ a {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    transition: all 0.3s ease-in-out;
+    transition: all 0.1s ease-in-out;
     position: relative;
     cursor: pointer;
 }
@@ -276,7 +495,7 @@ a {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s ease-in-out;
+    transition: all 0.1s ease-in-out;
 }
 
 .language-item:hover {
@@ -287,7 +506,7 @@ a {
 .language-icon {
     width: 2.5rem;
     height: 2.5rem;
-    filter: invert(70%);
+    filter: invert(75%);
     transition: filter 0.3s ease-in-out;
 }
 
@@ -369,15 +588,17 @@ a {
     border-radius: 12px;
     font-size: 0.75rem;
     font-weight: 600;
-    background-color: oklch(68.71% 0.202 24.112); /* Цвет для `dev-badge` */
-    color: oklch(38.024% 0.08469 46.721); /* Цвет для `dev-badge` */
+    background-color: var(--gray-text-color);
     display: flex;
     align-items: center;
     justify-content: center;
     white-space: nowrap;
+    box-shadow: none
 }
 .play-badge p{
-    color: oklch(43.975% 0.14284 25.254); /* Цвет для `dev-badge` */
+    color: var(--play-badge);
+    box-shadow: none;
+    text-shadow: none;
 }
 /* --- Стили для тегов проектов --- */
 .project-badge {
@@ -459,5 +680,172 @@ a {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 0.5rem;
+    }
+}
+
+.volume-card {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background-color: var(--card-background);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 0.35rem;
+    transition: all 0.3s ease-in-out;
+    z-index: 1000;
+}
+
+.volume-card:hover {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(15px);
+}
+
+.volume-btn {
+    background: none;
+    border: none;
+    color: var(--gray-text-color);
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 16px;
+    transition: all 0.3s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+.volume-btn:hover {
+    color: var(--accent-color);
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.volume-icon {
+    transition: all 0.3s ease-in-out;
+}
+
+.volume-off {
+    display: none;
+}
+
+/* Состояние выключенного звука */
+.volume-muted .volume-on {
+    display: none;
+}
+
+.volume-muted .volume-off {
+    display: block;
+}
+
+/* Адаптация для мобильных */
+@media (max-width: 768px) {
+    .volume-card {
+        position: fixed;
+        bottom: 20px;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+        width: fit-content;
+        transform: none !important; /* Убираем все трансформации */
+    }
+    
+    .volume-btn {
+        width: 2.5rem;
+        height: 2.5rem;
+    }
+    
+    .volume-icon {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+/* Для очень маленьких экранов */
+@media (max-width: 480px) {
+    .volume-card {
+        bottom: 15px;
+        padding: 0.4rem;
+    }
+    
+    .volume-btn {
+        width: 2.2rem;
+        height: 2.2rem;
+    }
+    
+    .volume-icon {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+@media (max-width: 639px) {
+    body {
+        overflow-x: hidden; /* отключает горизонтальный скролл */
+  overflow-y: hidden; /* включает вертикальный скролл */
+    }
+
+    .page-container {
+        transform: translateY(30px);
+        
+    }
+}
+/* Контейнер для аватара с эффектом смены */
+.profile-picture-container {
+    position: relative;
+    width: 6rem;
+    height: 6rem;
+    border-radius: 24px;
+    overflow: hidden;
+    transition: all 0.3s ease-in-out;
+}
+
+.profile-picture {
+    width: 100%;
+    height: 100%;
+    border-radius: 24px;
+    object-fit: cover;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Обычный аватар */
+.default-avatar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 1;
+}
+
+/* Discord аватар */
+.discord-avatar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transform: scale(0.8);
+}
+
+/* Эффект при наведении на контейнер аватара */
+.profile-picture-container:hover .default-avatar {
+    opacity: 0;
+    transform: scale(0.8);
+}
+
+.profile-picture-container:hover .discord-avatar {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Дополнительные эффекты при наведении */
+.profile-picture-container:hover {
+    transform: scale(1.0);
+}
+
+/* Для больших экранов */
+@media (min-width: 640px) {
+    .profile-picture-container {
+        width: 8rem;
+        height: 8rem;
     }
 }
