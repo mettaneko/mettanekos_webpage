@@ -784,23 +784,13 @@ a {
     body {
         overflow-x: hidden; /* отключает горизонтальный скролл */
   overflow-y: hidden; /* включает вертикальный скролл */
-    }
-
-    .page-container {
-        transform: translateY(29px);
-        
-    }
+        }
 }
 
 @media (max-width: 420px) {
     body {
         overflow-x: hidden; /* отключает горизонтальный скролл */
   overflow-y: hidden; /* включает вертикальный скролл */
-    }
-
-    .page-container {
-        transform: translateY(29px);
-        
     }
 }
 /* Контейнер для аватара с эффектом смены */
