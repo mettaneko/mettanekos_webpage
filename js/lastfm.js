@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const USERNAME = 'mettaneko'; // Замените на ваше имя пользователя Last.fm
     const LIMIT = 1; // Количество треков для отображения (берем только последний)
     const MUSIC_STATS_ELEMENT = document.querySelector('.data-card .song'); // Селектор для вашей карточки музыки
+    const SONG_LINK_ELEMENT = document.querySelector('.song-link'); // Селектор для ссылки на трек
 
     if (!MUSIC_STATS_ELEMENT) {
         console.error("Элемент для музыкальной статистики не найден.");
@@ -26,41 +27,47 @@ document.addEventListener('DOMContentLoaded', () => {
                     const artist = track.artist['#text'];
                     const songName = track.name;
                     // Last.fm может не всегда возвращать большую обложку, добавьте запасной вариант
-                    const albumCover = track.image.find(img => img.size === 'large' && img['#text']) ? track.image.find(img => img.size === 'large')['#text'] : 'placeholder-album.png'; // Замените на путь к заглушке
+                    const albumCover = track.image.find(img => img.size === 'large' && img['#text']) ? track.image.find(img => img.size === 'large')['#text'] : 'placeholder-album.png';
 
                     albumCoverElement.src = albumCover;
                     songNameElement.textContent = songName;
                     artistNameElement.textContent = artist;
+                    
+                    // --- НОВЫЙ КОД ДЛЯ ССЫЛКИ НА ПОИСК ВК ---
+                    if (SONG_LINK_ELEMENT) {
+                        // Формируем поисковый запрос
+                        const searchQuery = `${artist} - ${songName}`;
+                        
+                        // Создаем ссылку на поиск по аудиозаписям VK
+                        const vkSearchUrl = `https://vk.com/audio?act=search&q=${encodeURIComponent(searchQuery)}`;
+                        
+                        // Устанавливаем ссылку на VK-поиск
+                        SONG_LINK_ELEMENT.href = vkSearchUrl;
+                    }
+                    // ----------------------------------------
 
-                    // Проверяем, играет ли трек сейчас
                     const isNowPlaying = track['@attr'] && track['@attr'].nowplaying === 'true';
 
                     if (isNowPlaying) {
                         playsTextElement.textContent = '● Now';
-                        playsCountElement.textContent = ''; // Очищаем количество прослушиваний, если трек играет
-                        // Можно добавить анимацию или специальный стиль для "сейчас играет"
+                        playsCountElement.textContent = '';
                         MUSIC_STATS_ELEMENT.classList.add('now-playing');
                     } else {
                         playsTextElement.textContent = '● Last';
-                        // Для 'СЛУШАЛ' можно показать время, прошедшее с момента прослушивания,
-                        // или количество прослушиваний, если вы используете getTopTracks.
-                        // Если это просто последний трек и нет информации о playcount, можно оставить пустым
-                        // или написать "Недавно".
-                        playsCountElement.textContent = ''; // Для простоты оставляем пустым, если не хотим считать
-                                                            // или отображать playcount конкретно этого трека
+                        playsCountElement.textContent = '';
                         MUSIC_STATS_ELEMENT.classList.remove('now-playing');
-
-                        // Если нужен более точный "слушал N минут назад" - потребуется дополнительная логика
-                        // с timestamp трека (track.date.uts) и текущим временем.
                     }
 
                 } else {
-                    console.log("Нет данных о последних треках. Возможно, пользователь ничего не слушал или API вернул пустой ответ.");
+                    console.log("Нет данных о последних треках.");
                     songNameElement.textContent = 'NO DATA';
                     artistNameElement.textContent = '';
                     playsTextElement.textContent = '';
                     playsCountElement.textContent = '';
                     MUSIC_STATS_ELEMENT.classList.remove('now-playing');
+                    if (SONG_LINK_ELEMENT) {
+                        SONG_LINK_ELEMENT.href = '#'; // Сброс ссылки при отсутствии данных
+                    }
                 }
             })
             .catch(error => {
@@ -70,14 +77,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 playsTextElement.textContent = '';
                 playsCountElement.textContent = '';
                 MUSIC_STATS_ELEMENT.classList.remove('now-playing');
+                if (SONG_LINK_ELEMENT) {
+                    SONG_LINK_ELEMENT.href = '#'; // Сброс ссылки при ошибке
+                }
             });
     }
 
-    // Загружаем данные сразу при загрузке страницы
     fetchLastFmData();
-
-    // Обновляем данные каждые 30 секунд (или другой интервал)
-    // Будьте осторожны с лимитами API: 30 секунд (30000 мс) - это 2 запроса в минуту, 120 запросов в час.
-    // Если лимит 1000 запросов/час, это вполне безопасно.
-    setInterval(fetchLastFmData, 10000);
+    setInterval(fetchLastFmData, 10000); // Обновление каждые 10 секунд
 });
