@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Определяем порядок блоков для круговой навигации
-    const pageOrder = ['profile','projects', 'stats'];
+    const pageOrder = ['profile','languages','projects', 'stats'];
 
     const pagesWrapper = document.querySelector('.pages-wrapper');
     const prevButton = document.getElementById('prev-button');
