@@ -1527,3 +1527,56 @@ a {
 .opacity-90 {
   opacity: 0.9;
 }
+
+/* Полный запрет всех выделений и подсветок */
+* {
+    -webkit-tap-highlight-color: transparent !important;
+    -webkit-touch-callout: none !important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+    outline: none !important;
+}
+
+/* Только для текстовых полей разрешаем выделение */
+input, textarea, [contenteditable="true"] {
+    -webkit-user-select: text !important;
+    -moz-user-select: text !important;
+    -ms-user-select: text !important;
+    user-select: text !important;
+}
+
+/* ЗАМЕНИТЕ существующий .projects-list в media query (min-width: 640px) */
+@media (min-width: 640px) {
+    .projects-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 0.5rem;
+    }
+}
+
+/* ДОБАВЬТЕ этот код в конец файла style.css */
+/* Стиль для одного проекта - занимает всю ширину */
+.projects-list:has(.project-card:only-child) .project-card {
+    grid-column: 1 / -1;
+    max-width: 100%;
+}
+
+/* Альтернативный вариант - если первый вариант не работает */
+.projects-list:has(> a:only-child) {
+    grid-template-columns: 1fr;
+}
+@media (min-width: 640px) {
+    .projects-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 0.5rem;
+    }
+    
+    /* Если проект один - он занимает всю ширину */
+    .projects-list:has(.project-card:only-child) .project-card {
+        grid-column: 1 / -1;
+        max-width: 100%;
+    }
+}
