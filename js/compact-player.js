@@ -19,9 +19,8 @@ class CompactMusicPlayer {
         this.currentTrack = null;
         this.demoInterval = null;
         
-        // Твой существующий Vercel прокси URL
-        // Замени на твой реальный домен Vercel
-        this.VERCEL_PROXY_URL = 'https://mettaneko-steam-proxy.vercel.app/api/deezer';
+        // Пока используем демо-режим, пока не настроим прокси
+        this.VERCEL_PROXY_URL = 'https://mettaneko-steam-proxy.vercel.app/api/zaycev';
         
         this.init();
     }
@@ -40,7 +39,7 @@ class CompactMusicPlayer {
         this.audio.addEventListener('error', (e) => this.onAudioError(e));
         this.audio.addEventListener('canplay', () => this.onAudioCanPlay());
         
-        console.log('Compact player initialized with proxy:', this.VERCEL_PROXY_URL);
+        console.log('Compact player initialized');
     }
     
     open(trackInfo) {
@@ -56,67 +55,207 @@ class CompactMusicPlayer {
         // Останавливаем текущее воспроизведение
         this.stopAudio();
         
-        // Загружаем аудио через Vercel прокси
-        this.loadAudioViaProxy(trackInfo.artist, trackInfo.name);
+        // Пока используем демо-режим
+        this.setupDemoMode();
         
         // Показываем плеер
         this.player.classList.remove('hiding');
         this.player.classList.add('active');
-    }
-    
-    async loadAudioViaProxy(artist, trackName) {
-        this.showNotification('🔍 Поиск трека...');
         
-        try {
-            const proxyUrl = `${this.VERCEL_PROXY_URL}?artist=${encodeURIComponent(artist)}&track=${encodeURIComponent(trackName)}`;
-            
-            console.log('Fetching from proxy:', proxyUrl);
-            
-            const response = await fetch(proxyUrl);
-            
-            if (!response.ok) {
-                throw new Error(`Proxy responded with status: ${response.status}`);
-            }
-            
-            const data = await response.json();
-            
-            if (data.success && data.preview) {
-                console.log('Audio URL found:', data.preview);
-                this.audio.src = data.preview;
-                this.audio.load();
-                this.showNotification('🎵 Трек найден! Загрузка...');
-                
-                // Обновляем обложку если есть из Deezer
-                if (data.cover && data.cover !== 'assets/on_off.png') {
-                    document.getElementById('compactAlbumCover').src = data.cover;
-                }
-            } else {
-                console.log('Track not found in response:', data);
-                this.showNotification('❌ Трек не найден. Демо-режим.');
-                this.setupVisualDemo();
-            }
-        } catch (error) {
-            console.error('Proxy fetch error:', error);
-            this.showNotification('⚠️ Ошибка загрузки. Демо-режим.');
-            this.setupVisualDemo();
-        }
+        this.showNotification('🎵 Демо-режим. Нажми Play для визуального воспроизведения');
     }
     
-    onAudioCanPlay() {
-        this.showNotification('✅ Трек готов к воспроизведению');
-        this.updateDuration();
-    }
-    
-    setupVisualDemo() {
-        // Настраиваем визуальное демо
-        this.demoDuration = 30;
+    setupDemoMode() {
+        // Настраиваем демо-режим с визуальным воспроизведением
+        this.demoDuration = 180; // 3 минуты
         this.demoCurrentTime = 0;
         this.durationEl.textContent = this.formatTime(this.demoDuration);
         this.currentTimeEl.textContent = '0:00';
         this.progress.style.width = '0%';
     }
     
-    // ... остальные методы без изменений (play, pause, togglePlayPause и т.д.) ...
+    stopAudio() {
+        // Останавливаем все воспроизведение
+        this.pause();
+        this.audio.src = '';
+        this.audio.load();
+        this.stopDemoProgress();
+        this.demoCurrentTime = 0;
+    }
+    
+    togglePlayPause() {
+        if (this.isPlaying) {
+            this.pause();
+        } else {
+            this.play();
+        }
+    }
+    
+    play() {
+        if (this.audio.src) {
+            // Реальное аудио
+            this.audio.play().then(() => {
+                this.isPlaying = true;
+                this.updatePlayButton();
+                this.showNotification('Воспроизведение');
+            }).catch(error => {
+                console.error('Play error:', error);
+                this.startDemoPlayback();
+            });
+        } else {
+            // Демо-режим
+            this.startDemoPlayback();
+        }
+    }
+    
+    startDemoPlayback() {
+        this.isPlaying = true;
+        this.updatePlayButton();
+        this.startDemoProgress();
+        this.showNotification('Демо-воспроизведение');
+    }
+    
+    pause() {
+        if (this.isPlaying) {
+            if (this.audio.src) {
+                this.audio.pause();
+            }
+            this.stopDemoProgress();
+            
+            this.isPlaying = false;
+            this.updatePlayButton();
+            this.showNotification('Пауза');
+        }
+    }
+    
+    startDemoProgress() {
+        this.stopDemoProgress();
+        
+        this.demoInterval = setInterval(() => {
+            if (this.demoCurrentTime < this.demoDuration) {
+                this.demoCurrentTime++;
+                this.updateDemoProgress();
+            } else {
+                this.onTrackEnd();
+            }
+        }, 1000);
+    }
+    
+    stopDemoProgress() {
+        if (this.demoInterval) {
+            clearInterval(this.demoInterval);
+            this.demoInterval = null;
+        }
+    }
+    
+    updateDemoProgress() {
+        const progressPercent = (this.demoCurrentTime / this.demoDuration) * 100;
+        this.progress.style.width = `${progressPercent}%`;
+        this.currentTimeEl.textContent = this.formatTime(this.demoCurrentTime);
+    }
+    
+    toggleMute() {
+        this.audio.muted = !this.audio.muted;
+        this.updateVolumeButton();
+        this.showNotification(this.audio.muted ? '🔇 Звук выключен' : '🔊 Звук включен');
+    }
+    
+    setProgress(e) {
+        if (!this.isPlaying) return;
+        
+        const rect = this.progressBar.getBoundingClientRect();
+        const percent = (e.clientX - rect.left) / rect.width;
+        
+        if (this.audio.src && this.audio.duration > 0) {
+            // Реальное аудио
+            this.audio.currentTime = percent * this.audio.duration;
+        } else {
+            // Демо аудио
+            this.demoCurrentTime = Math.floor(percent * this.demoDuration);
+            this.updateDemoProgress();
+        }
+    }
+    
+    onTrackEnd() {
+        this.isPlaying = false;
+        this.updatePlayButton();
+        this.stopDemoProgress();
+        
+        if (this.audio.src) {
+            this.audio.currentTime = 0;
+            this.progress.style.width = '0%';
+            this.currentTimeEl.textContent = '0:00';
+        } else {
+            this.demoCurrentTime = 0;
+            this.updateDemoProgress();
+        }
+        
+        this.showNotification('Трек завершен');
+    }
+    
+    onAudioError(e) {
+        console.error('Audio error:', e);
+        this.showNotification('Ошибка аудио, переключаюсь в демо-режим');
+        this.setupDemoMode();
+    }
+    
+    onAudioCanPlay() {
+        this.showNotification('Аудио готово к воспроизведению');
+        this.updateDuration();
+    }
+    
+    updateDuration() {
+        if (this.audio.duration > 0) {
+            this.durationEl.textContent = this.formatTime(this.audio.duration);
+        } else if (this.demoDuration) {
+            this.durationEl.textContent = this.formatTime(this.demoDuration);
+        }
+    }
+    
+    updateProgress() {
+        if (this.audio.src && this.audio.duration > 0) {
+            const currentTime = this.audio.currentTime;
+            const duration = this.audio.duration;
+            const progressPercent = (currentTime / duration) * 100;
+            this.progress.style.width = `${progressPercent}%`;
+            this.currentTimeEl.textContent = this.formatTime(currentTime);
+        }
+    }
+    
+    updatePlayButton() {
+        if (this.isPlaying) {
+            this.playIcon.style.display = 'none';
+            this.pauseIcon.style.display = 'block';
+        } else {
+            this.playIcon.style.display = 'block';
+            this.pauseIcon.style.display = 'none';
+        }
+    }
+    
+    updateVolumeButton() {
+        if (this.audio.muted) {
+            this.volumeOnIcon.style.display = 'none';
+            this.volumeOffIcon.style.display = 'block';
+        } else {
+            this.volumeOnIcon.style.display = 'block';
+            this.volumeOffIcon.style.display = 'none';
+        }
+    }
+    
+    close() {
+        this.player.classList.add('hiding');
+        setTimeout(() => {
+            this.player.classList.remove('active');
+            this.stopAudio();
+        }, 300);
+    }
+    
+    formatTime(seconds) {
+        if (isNaN(seconds)) return '0:00';
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    }
     
     showNotification(message) {
         console.log('Player:', message);
