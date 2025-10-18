@@ -1,7 +1,6 @@
 class CompactMusicPlayer {
     constructor() {
         this.player = document.getElementById('compactPlayer');
-        this.audio = document.getElementById('compactAudioPlayer');
         this.closeBtn = document.getElementById('compactCloseBtn');
         this.playPauseBtn = document.getElementById('compactPlayPauseBtn');
         this.volumeBtn = document.getElementById('compactVolumeBtn');
@@ -18,32 +17,22 @@ class CompactMusicPlayer {
         this.isPlaying = false;
         this.currentTrack = null;
         this.demoInterval = null;
-        
-        // Пока используем демо-режим, пока не настроим прокси
-        this.VERCEL_PROXY_URL = 'https://mettaneko-steam-proxy.vercel.app/api/zaycev';
+        this.isMuted = false;
         
         this.init();
     }
     
     init() {
-        // Обработчики событий
         this.closeBtn.addEventListener('click', () => this.close());
         this.playPauseBtn.addEventListener('click', () => this.togglePlayPause());
         this.volumeBtn.addEventListener('click', () => this.toggleMute());
         this.progressBar.addEventListener('click', (e) => this.setProgress(e));
         
-        // События аудио элемента
-        this.audio.addEventListener('loadedmetadata', () => this.updateDuration());
-        this.audio.addEventListener('timeupdate', () => this.updateProgress());
-        this.audio.addEventListener('ended', () => this.onTrackEnd());
-        this.audio.addEventListener('error', (e) => this.onAudioError(e));
-        this.audio.addEventListener('canplay', () => this.onAudioCanPlay());
-        
-        console.log('Compact player initialized');
+        console.log('🎵 Compact player initialized - Visual Demo Mode');
     }
     
     open(trackInfo) {
-        console.log('Opening player with track:', trackInfo);
+        console.log('🎵 Opening player with track:', trackInfo);
         
         this.currentTrack = trackInfo;
         
@@ -55,7 +44,7 @@ class CompactMusicPlayer {
         // Останавливаем текущее воспроизведение
         this.stopAudio();
         
-        // Пока используем демо-режим
+        // Настраиваем демо-режим
         this.setupDemoMode();
         
         // Показываем плеер
@@ -65,22 +54,22 @@ class CompactMusicPlayer {
         this.showNotification('🎵 Демо-режим. Нажми Play для визуального воспроизведения');
     }
     
+    stopAudio() {
+        console.log('⏹️ Stopping audio playback');
+        this.pause();
+        this.stopDemoProgress();
+        this.demoCurrentTime = 0;
+    }
+    
     setupDemoMode() {
-        // Настраиваем демо-режим с визуальным воспроизведением
-        this.demoDuration = 180; // 3 минуты
+        // Устанавливаем случайную длительность трека от 2 до 4 минут
+        this.demoDuration = Math.floor(Math.random() * 120) + 120; // 2-4 минуты
         this.demoCurrentTime = 0;
         this.durationEl.textContent = this.formatTime(this.demoDuration);
         this.currentTimeEl.textContent = '0:00';
         this.progress.style.width = '0%';
-    }
-    
-    stopAudio() {
-        // Останавливаем все воспроизведение
-        this.pause();
-        this.audio.src = '';
-        this.audio.load();
-        this.stopDemoProgress();
-        this.demoCurrentTime = 0;
+        
+        console.log(`⏱️ Demo track duration: ${this.formatTime(this.demoDuration)}`);
     }
     
     togglePlayPause() {
@@ -92,39 +81,20 @@ class CompactMusicPlayer {
     }
     
     play() {
-        if (this.audio.src) {
-            // Реальное аудио
-            this.audio.play().then(() => {
-                this.isPlaying = true;
-                this.updatePlayButton();
-                this.showNotification('Воспроизведение');
-            }).catch(error => {
-                console.error('Play error:', error);
-                this.startDemoPlayback();
-            });
-        } else {
-            // Демо-режим
-            this.startDemoPlayback();
-        }
-    }
-    
-    startDemoPlayback() {
+        console.log('▶️ Starting playback');
         this.isPlaying = true;
         this.updatePlayButton();
         this.startDemoProgress();
-        this.showNotification('Демо-воспроизведение');
+        this.showNotification('▶️ Воспроизведение');
     }
     
     pause() {
         if (this.isPlaying) {
-            if (this.audio.src) {
-                this.audio.pause();
-            }
+            console.log('⏸️ Pausing playback');
             this.stopDemoProgress();
-            
             this.isPlaying = false;
             this.updatePlayButton();
-            this.showNotification('Пауза');
+            this.showNotification('⏸️ Пауза');
         }
     }
     
@@ -135,10 +105,29 @@ class CompactMusicPlayer {
             if (this.demoCurrentTime < this.demoDuration) {
                 this.demoCurrentTime++;
                 this.updateDemoProgress();
+                
+                // Случайное событие - "буферизация"
+                if (Math.random() < 0.01) { // 1% chance
+                    this.simulateBuffering();
+                }
             } else {
                 this.onTrackEnd();
             }
         }, 1000);
+    }
+    
+    simulateBuffering() {
+        console.log('📥 Simulating buffering...');
+        this.showNotification('📥 Буферизация...');
+        
+        // Временно останавливаем прогресс на 2 секунды
+        this.stopDemoProgress();
+        setTimeout(() => {
+            if (this.isPlaying) {
+                this.startDemoProgress();
+                this.showNotification('✅ Буферизация завершена');
+            }
+        }, 2000);
     }
     
     stopDemoProgress() {
@@ -152,12 +141,16 @@ class CompactMusicPlayer {
         const progressPercent = (this.demoCurrentTime / this.demoDuration) * 100;
         this.progress.style.width = `${progressPercent}%`;
         this.currentTimeEl.textContent = this.formatTime(this.demoCurrentTime);
+        
+        // Обновляем длительность на случай если она изменилась
+        this.durationEl.textContent = this.formatTime(this.demoDuration);
     }
     
     toggleMute() {
-        this.audio.muted = !this.audio.muted;
+        this.isMuted = !this.isMuted;
         this.updateVolumeButton();
-        this.showNotification(this.audio.muted ? '🔇 Звук выключен' : '🔊 Звук включен');
+        this.showNotification(this.isMuted ? '🔇 Звук выключен' : '🔊 Звук включен');
+        console.log(this.isMuted ? '🔇 Muted' : '🔊 Unmuted');
     }
     
     setProgress(e) {
@@ -166,60 +159,36 @@ class CompactMusicPlayer {
         const rect = this.progressBar.getBoundingClientRect();
         const percent = (e.clientX - rect.left) / rect.width;
         
-        if (this.audio.src && this.audio.duration > 0) {
-            // Реальное аудио
-            this.audio.currentTime = percent * this.audio.duration;
-        } else {
-            // Демо аудио
-            this.demoCurrentTime = Math.floor(percent * this.demoDuration);
-            this.updateDemoProgress();
-        }
+        this.demoCurrentTime = Math.floor(percent * this.demoDuration);
+        this.updateDemoProgress();
+        
+        console.log(`⏩ Seeking to: ${this.formatTime(this.demoCurrentTime)}`);
+        this.showNotification(`⏩ Перемотка: ${this.formatTime(this.demoCurrentTime)}`);
     }
     
     onTrackEnd() {
+        console.log('⏹️ Track ended');
         this.isPlaying = false;
         this.updatePlayButton();
         this.stopDemoProgress();
+        this.demoCurrentTime = 0;
+        this.updateDemoProgress();
         
-        if (this.audio.src) {
-            this.audio.currentTime = 0;
-            this.progress.style.width = '0%';
-            this.currentTimeEl.textContent = '0:00';
-        } else {
-            this.demoCurrentTime = 0;
-            this.updateDemoProgress();
-        }
+        this.showNotification('✅ Трек завершен');
         
-        this.showNotification('Трек завершен');
+        // Автопереход на "следующий трек" через 3 секунды
+        setTimeout(() => {
+            if (this.player.classList.contains('active')) {
+                this.showNotification('🔄 Автопереход на следующий трек...');
+                this.restartPlayback();
+            }
+        }, 3000);
     }
     
-    onAudioError(e) {
-        console.error('Audio error:', e);
-        this.showNotification('Ошибка аудио, переключаюсь в демо-режим');
+    restartPlayback() {
+        this.stopAudio();
         this.setupDemoMode();
-    }
-    
-    onAudioCanPlay() {
-        this.showNotification('Аудио готово к воспроизведению');
-        this.updateDuration();
-    }
-    
-    updateDuration() {
-        if (this.audio.duration > 0) {
-            this.durationEl.textContent = this.formatTime(this.audio.duration);
-        } else if (this.demoDuration) {
-            this.durationEl.textContent = this.formatTime(this.demoDuration);
-        }
-    }
-    
-    updateProgress() {
-        if (this.audio.src && this.audio.duration > 0) {
-            const currentTime = this.audio.currentTime;
-            const duration = this.audio.duration;
-            const progressPercent = (currentTime / duration) * 100;
-            this.progress.style.width = `${progressPercent}%`;
-            this.currentTimeEl.textContent = this.formatTime(currentTime);
-        }
+        this.play();
     }
     
     updatePlayButton() {
@@ -233,7 +202,7 @@ class CompactMusicPlayer {
     }
     
     updateVolumeButton() {
-        if (this.audio.muted) {
+        if (this.isMuted) {
             this.volumeOnIcon.style.display = 'none';
             this.volumeOffIcon.style.display = 'block';
         } else {
@@ -243,11 +212,13 @@ class CompactMusicPlayer {
     }
     
     close() {
+        console.log('❌ Closing player');
         this.player.classList.add('hiding');
         setTimeout(() => {
             this.player.classList.remove('active');
             this.stopAudio();
         }, 300);
+        this.showNotification('👋 Плеер закрыт');
     }
     
     formatTime(seconds) {
@@ -258,10 +229,16 @@ class CompactMusicPlayer {
     }
     
     showNotification(message) {
-        console.log('Player:', message);
+        console.log('💬 Player:', message);
         
-        // Создаем красивое уведомление
+        // Удаляем старое уведомление если есть
+        const oldNotification = document.querySelector('.player-notification');
+        if (oldNotification) {
+            oldNotification.remove();
+        }
+        
         const notification = document.createElement('div');
+        notification.className = 'player-notification';
         notification.style.cssText = `
             position: fixed;
             bottom: 100px;
@@ -269,31 +246,63 @@ class CompactMusicPlayer {
             transform: translateX(-50%);
             background: var(--card-background);
             color: var(--text-color);
-            padding: 10px 20px;
-            border-radius: 12px;
+            padding: 12px 24px;
+            border-radius: 16px;
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
             z-index: 1002;
             font-size: 14px;
+            font-weight: 600;
             white-space: nowrap;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            animation: slideUp 0.3s ease-out;
         `;
         notification.textContent = message;
         document.body.appendChild(notification);
         
         setTimeout(() => {
             if (notification.parentNode) {
-                notification.parentNode.removeChild(notification);
+                notification.style.animation = 'slideDown 0.3s ease-in';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
             }
         }, 3000);
     }
 }
 
-// Глобальная инициализация
-let compactPlayer;
+// Добавляем CSS анимации для уведомлений
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateX(-50%) translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    }
+    
+    @keyframes slideDown {
+        from {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        to {
+            opacity: 0;
+            transform: translateX(-50%) translateY(20px);
+        }
+    }
+`;
+document.head.appendChild(style);
 
+let compactPlayer;
 document.addEventListener('DOMContentLoaded', () => {
     compactPlayer = new CompactMusicPlayer();
     window.compactPlayer = compactPlayer;
-    console.log('Compact player ready');
+    console.log('🎵 Compact player ready - Visual Demo Mode Active');
 });
