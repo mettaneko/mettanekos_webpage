@@ -628,7 +628,10 @@ a {
     background-color: oklch(0.88 0.182 98.111);
     color: oklch(40.547% 0.182 98.111);
 }
-
+.deprecated-badge {
+    background-color: oklch(61.099% 0.16919 23.529);
+    color: oklch(39.072% 0.12088 24.667);
+}
 .closed-badge {
     background-color: oklch(0.78 0.114 19.571);
     color: oklch(40.547% 0.05883 20.555);
