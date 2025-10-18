@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
         } catch (error) {
             console.error('Ошибка при загрузке Discord аватара:', error);
             // В случае ошибки, скрыть аватар
-            discordAvatar.style.display = 'none';
+            
         }
     }
     

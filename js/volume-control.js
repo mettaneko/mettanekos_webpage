@@ -1,17 +1,43 @@
-document.addEventListener('DOMContentLoaded', function() {
+window.addEventListener('load', () => {
+    const loadingScreen = document.getElementById('loadingScreen');
     const video = document.getElementById('bgVideo');
-    const volumeToggle = document.getElementById('volumeToggle');
+    const volumeBtn = document.querySelector('.volume-btn');
 
-    // 2. Обработчик клика
-    volumeToggle.addEventListener('click', function() {
-        // Переключаем состояние mute
-        video.muted = !video.muted;
+    // Небольшая задержка для "эффекта загрузки"
+    setTimeout(() => {
+        loadingScreen.classList.add('hidden');
+
+        // Попытка включить видео со звуком
+        video.muted = false;
+        video.play().catch(() => {
+            // Если браузер не даёт autoplay со звуком — включаем без звука
+            video.muted = true;
+            video.play();
+            
+            // Обновляем состояние кнопки после мьюта
+            updateVolumeButtonState(volumeBtn, video);
+        });
+    }, 1200);
+
+    // Обработчик нажатия на кнопку
+    if (volumeBtn) {
+        volumeBtn.addEventListener('click', () => {
+            // Инвертируем состояние мьюта
+            video.muted = !video.muted;
+            
+            // Обновляем состояние кнопки
+            updateVolumeButtonState(volumeBtn, video);
+        });
+    }
+
+    // Функция обновления состояния кнопки
+    function updateVolumeButtonState(button, videoElement) {
+        if (!button || !videoElement) return;
         
-        // Обновляем класс кнопки в соответствии с новым состоянием
-        if (video.muted) {
-            volumeToggle.classList.add('is-muted'); // Кнопка "Выключено"
-        } else {
-            volumeToggle.classList.remove('is-muted'); // Кнопка "Включено"
-        }
-    });
+        // Добавляем/удаляем класс для визуального отражения состояния
+        button.classList.toggle('is-muted', videoElement.muted);
+        
+        // Обновляем атрибут aria-label для доступности
+        button.setAttribute('aria-label', videoElement.muted ? 'Unmute' : 'Mute');
+    }
 });
