@@ -1,18 +1,39 @@
-
 window.addEventListener('load', () => {
     const loadingScreen = document.getElementById('loadingScreen');
     const video = document.getElementById('bgVideo');
 
-    // Небольшая задержка для "эффекта загрузки"
-    setTimeout(() => {
+    // Проверяем, есть ли уже хэш (пользователь вернулся на страницу)
+    if (window.location.hash) {
+        // Если хэш уже есть, сразу скрываем плашку и запускаем видео
         loadingScreen.classList.add('hidden');
+        startVideoPlayback();
+    } else {
+        // Если хэша нет, показываем плашку и ждем клика
+        const startExperience = () => {
+            // Добавляем хэш в URL
+            window.location.hash = '#';
+            loadingScreen.classList.add('hidden');
+            startVideoPlayback();
+            
+            // Удаляем обработчики после первого клика
+            document.removeEventListener('click', startExperience);
+            loadingScreen.removeEventListener('click', startExperience);
+        };
 
-        // Попытка включить видео со звуком
+        // Добавляем обработчики клика
+        document.addEventListener('click', startExperience);
+        loadingScreen.addEventListener('click', startExperience);
+    }
+
+    // Функция для запуска видео
+    function startVideoPlayback() {
         video.muted = false;
-        video.play().catch(() => {
-            // Если браузер не даёт autoplay со звуком — включаем без звука
+        video.play().catch((error) => {
+            console.log('Autoplay with sound failed, trying muted:', error);
             video.muted = true;
-            video.play();
+            video.play().catch((error) => {
+                console.log('Muted autoplay also failed:', error);
+            });
         });
-    }, 1200);
+    }
 });

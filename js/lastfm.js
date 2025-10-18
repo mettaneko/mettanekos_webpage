@@ -21,31 +21,26 @@ document.addEventListener('DOMContentLoaded', () => {
             event.preventDefault();
             
             if (currentTrack && currentTrack.name !== 'Failed to load Last.Fm' && currentTrack.name !== 'NO DATA') {
-                // Безопасная проверка и вызов плеера
-                openPlayer(currentTrack);
+                // Открываем compact player вместо перехода на Last.fm
+                openCompactPlayer(currentTrack);
             } else {
                 console.log('No valid track data available');
             }
         });
     }
 
-    // Функция для безопасного открытия плеера
-    function openPlayer(trackInfo) {
-        // Проверяем доступность плеера
+    // Функция для открытия compact player
+    function openCompactPlayer(trackInfo) {
+        console.log('Opening compact player with track:', trackInfo);
+        
+        // Проверяем доступность compact player
         if (window.compactPlayer && typeof window.compactPlayer.open === 'function') {
             window.compactPlayer.open(trackInfo);
         } else {
             console.error('Compact player not available or not initialized');
-            // Альтернативное поведение - открываем Last.fm страницу
-            if (trackInfo.lastfmUrl) {
-                window.open(trackInfo.lastfmUrl, '_blank');
-            } else {
-                // Создаем URL для Last.fm
-                const encodedArtist = encodeURIComponent(trackInfo.artist);
-                const encodedSongName = encodeURIComponent(trackInfo.name);
-                const lastfmUrl = `https://www.last.fm/music/${encodedArtist}/_/${encodedSongName}`;
-                window.open(lastfmUrl, '_blank');
-            }
+            // Fallback: открываем Last.fm только если плеер недоступен
+            const lastfmUrl = trackInfo.lastfmUrl || `https://www.last.fm/music/${encodeURIComponent(trackInfo.artist)}/_/${encodeURIComponent(trackInfo.name)}`;
+            window.open(lastfmUrl, '_blank');
         }
     }
 
@@ -105,3 +100,31 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchLastFmData();
     setInterval(fetchLastFmData, 10000);
 });
+
+// Обработчик клика по карточке трека
+if (SONG_LINK_ELEMENT) {
+    SONG_LINK_ELEMENT.addEventListener('click', (event) => {
+        event.preventDefault();
+        
+        if (currentTrack && currentTrack.name !== 'Failed to load Last.Fm' && currentTrack.name !== 'NO DATA') {
+            // Переключаем отображение плеера
+            toggleCompactPlayer(currentTrack);
+        } else {
+            console.log('No valid track data available');
+        }
+    });
+}
+
+// Функция для переключения compact player
+function toggleCompactPlayer(trackInfo) {
+    console.log('toggleCompactPlayer called');
+    
+    if (window.compactPlayer && typeof window.compactPlayer.toggle === 'function') {
+        window.compactPlayer.toggle(trackInfo);
+    } else {
+        console.error('Compact player not available');
+        // Fallback
+        const lastfmUrl = trackInfo.lastfmUrl || `https://www.last.fm/music/${encodeURIComponent(trackInfo.artist)}/_/${encodeURIComponent(trackInfo.name)}`;
+        window.open(lastfmUrl, '_blank');
+    }
+}

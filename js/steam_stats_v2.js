@@ -79,3 +79,34 @@ document.addEventListener('DOMContentLoaded', () => {
     // Обновляем данные каждые 5 минут (300 000 миллисекунд)
     setInterval(fetchSteamRecentGames, 60000 * 5); 
 });
+
+// Обработчик клика по карточке игры
+if (GAME_LINK_ELEMENT) {
+    GAME_LINK_ELEMENT.addEventListener('click', (event) => {
+        event.preventDefault();
+        
+        if (currentGame && currentGame.name !== 'Failed to load Steam API') {
+            // Открываем страницу игры в Steam
+            openSteamGame(currentGame);
+        } else {
+            console.log('No valid game data available');
+        }
+    });
+}
+
+// Функция для открытия игры в Steam
+function openSteamGame(gameInfo) {
+    if (gameInfo.steamUrl) {
+        // Если есть прямой URL игры, используем его
+        window.open(gameInfo.steamUrl, '_blank');
+    } else if (gameInfo.appid) {
+        // Если есть appid, создаем URL
+        const steamUrl = `https://store.steampowered.com/app/${gameInfo.appid}`;
+        window.open(steamUrl, '_blank');
+    } else {
+        // Если нет appid, ищем игру в магазине Steam
+        const encodedGameName = encodeURIComponent(gameInfo.name);
+        const steamStoreUrl = `https://store.steampowered.com/search/?term=${encodedGameName}`;
+        window.open(steamStoreUrl, '_blank');
+    }
+}

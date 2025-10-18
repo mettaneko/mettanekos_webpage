@@ -1063,22 +1063,64 @@ a {
     height: 80px;
   }
 }
+
+/* ---------- Заглушка ---------- */
+.intro-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 10, 20, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    z-index: 9999;
+    cursor: pointer;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+.intro-overlay.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.intro-text {
+    font-family: var(--font-sans);
+    font-size: 2rem;
+    color: var(--accent-color);
+    animation: pulse 4s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 0.5;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+}
 /* -------------------------------------------------------------------- */
-/* СТИЛИ ДЛЯ КОМПАКТНОГО ПЛЕЕРА */
+/* СТИЛИ ДЛЯ КОМПАКТНОГО ПЛЕЕРА С ПЛАТФОРМАМИ */
 /* -------------------------------------------------------------------- */
 .compact-player {
   position: fixed;
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%) translateY(100px);
-  width: 95%;
-  max-width: 800px;
+  width: 85%;
+  max-width: 600px;
   background: var(--card-background);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 16px;
-  padding: 1rem 1.5rem;
+  padding: 0.75rem 1.25rem;
   z-index: 1000;
   opacity: 0;
   visibility: hidden;
@@ -1092,27 +1134,36 @@ a {
   transform: translateX(-50%) translateY(0);
 }
 
+.compact-player.hiding {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-50%) translateY(100px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 .compact-player-content {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1.5rem;
-  height: 60px;
+  gap: 1rem;
+  height: 50px;
 }
 
 /* Левая часть: обложка и информация */
 .player-left {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
   flex: 0 0 auto;
-  min-width: 200px;
+  min-width: 160px;
+  max-width: 200px;
+  overflow: hidden;
 }
 
 .compact-album-cover {
-  width: 50px;
-  height: 50px;
-  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
   overflow: hidden;
   flex-shrink: 0;
 }
@@ -1128,50 +1179,168 @@ a {
   flex-direction: column;
   justify-content: center;
   min-width: 0;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Контейнер для бегущего названия трека */
+.track-name-container {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 20px;
+  margin-bottom: 2px;
+}
+
+.track-name-scroll {
+  display: inline-block;
+  white-space: nowrap;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* Бесконечная анимация бегущего текста когда текст не помещается */
+.track-name-scroll.scrolling {
+  animation: scrollTrackNameInfinite 15s linear infinite;
+  padding-left: 100%; /* Начинаем справа за пределами контейнера */
+}
+
+/* Пауза анимации при hover */
+.track-name-container:hover .track-name-scroll.scrolling {
+  animation-play-state: paused;
+}
+
+/* Бесконечная анимация - текст проходит слева направо и повторяется */
+@keyframes scrollTrackNameInfinite {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+/* Альтернативная анимация с паузой между циклами */
+.track-name-scroll.scrolling-with-pause {
+  animation: scrollTrackNameWithPause 20s linear infinite;
+  padding-left: 100%;
+}
+
+@keyframes scrollTrackNameWithPause {
+  0% {
+    transform: translateX(100%);
+  }
+  70% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
 }
 
 .compact-track-name {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 600;
   color: var(--text-color);
   margin: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  line-height: 1.2;
+  display: inline-block;
+  padding-right: 50px; /* Расстояние между повторяющимся текстом */
+}
+
+/* Дублируем текст для бесконечного эффекта */
+.track-name-scroll.scrolling .compact-track-name::after {
+  content: attr(data-text);
+  padding-left: 50px; /* Расстояние между оригиналом и дубликатом */
 }
 
 .compact-artist-name {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: var(--gray-text-color);
   margin: 0;
+  line-height: 1.2;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-/* Центральная часть: управление и прогресс */
+/* Центральная часть: кнопки платформ */
 .player-center {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
+  justify-content: center;
   flex: 1;
-  max-width: 400px;
-  min-width: 300px;
+  max-width: 280px;
+  min-width: 200px;
 }
 
-.compact-controls {
+.compact-platforms {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.5rem;
 }
 
-.compact-control-btn {
+.platform-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 50%;
+  border-radius: 8px;
   width: 36px;
   height: 36px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+  position: relative;
+}
+
+.platform-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+  border-color: var(--accent-color);
+}
+
+.platform-icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* Специфичные цвета для платформ при наведении */
+.platform-btn.vk-platform:hover {
+  background: rgba(76, 117, 163, 0.2);
+  border-color: rgba(76, 117, 163, 0.5);
+}
+
+.platform-btn.spotify-platform:hover {
+  background: rgba(29, 185, 84, 0.2);
+  border-color: rgba(29, 185, 84, 0.5);
+}
+
+.platform-btn.youtube-platform:hover {
+  background: rgba(255, 0, 0, 0.2);
+  border-color: rgba(255, 0, 0, 0.5);
+}
+
+.platform-btn.lastfm-platform:hover {
+  background: rgba(186, 0, 0, 0.2);
+  border-color: rgba(186, 0, 0, 0.5);
+}
+
+/* Правая часть: закрытие */
+.player-right {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+}
+
+.close-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1181,76 +1350,10 @@ a {
   padding: 0;
 }
 
-.compact-control-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: scale(1.05);
-  border-color: var(--accent-color);
-}
-
-.play-pause-btn {
-  width: 44px;
-  height: 44px;
-  background: var(--accent-color);
-  border-color: var(--accent-color);
-}
-
-.play-pause-btn:hover {
-  background: var(--accent-color);
-  filter: brightness(1.2);
-}
-
-.compact-progress-container {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  width: 100%;
-}
-
-.compact-time {
-  font-size: 0.75rem;
-  color: var(--gray-text-color);
-  min-width: 35px;
-  font-variant-numeric: tabular-nums;
-}
-
-.compact-progress-bar {
-  flex: 1;
-  height: 4px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 2px;
-  cursor: pointer;
-  position: relative;
-  transition: height 0.2s ease;
-}
-
-.compact-progress-bar:hover {
-  height: 6px;
-}
-
-.compact-progress {
-  height: 100%;
-  background: var(--accent-color);
-  border-radius: 2px;
-  width: 0%;
-  transition: width 0.1s ease;
-}
-
-/* Правая часть: громкость и закрытие */
-.player-right {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  flex: 0 0 auto;
-}
-
-.volume-btn, .close-btn {
-  background: transparent;
-  border: 1px solid transparent;
-}
-
-.volume-btn:hover, .close-btn:hover {
+.close-btn:hover {
   background: rgba(255, 255, 255, 0.1);
   border-color: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
 }
 
 /* Анимация появления */
@@ -1288,22 +1391,23 @@ a {
 @media (max-width: 768px) {
   .compact-player {
     bottom: 10px;
-    width: 98%;
-    padding: 0.75rem 1rem;
+    width: 92%;
+    padding: 0.6rem 1rem;
   }
   
   .compact-player-content {
-    gap: 1rem;
-    height: 50px;
+    gap: 0.8rem;
+    height: 45px;
   }
   
   .player-left {
-    min-width: 150px;
+    min-width: 140px;
+    max-width: 160px;
   }
   
   .compact-album-cover {
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
   }
   
   .compact-track-name {
@@ -1311,53 +1415,89 @@ a {
   }
   
   .compact-artist-name {
-    font-size: 0.75rem;
-  }
-  
-  .player-center {
-    min-width: 200px;
-  }
-  
-  .compact-control-btn {
-    width: 32px;
-    height: 32px;
-  }
-  
-  .play-pause-btn {
-    width: 38px;
-    height: 38px;
-  }
-  
-  .compact-progress-container {
-    gap: 0.5rem;
-  }
-  
-  .compact-time {
     font-size: 0.7rem;
-    min-width: 30px;
-  }
-}
-
-@media (max-width: 480px) {
-  .compact-player-content {
-    gap: 0.5rem;
-  }
-  
-  .player-left {
-    min-width: 120px;
-  }
-  
-  .compact-track-info {
-    display: none; /* Скрываем текст на очень маленьких экранах */
   }
   
   .player-center {
     min-width: 180px;
+    max-width: 220px;
+  }
+  
+  .compact-platforms {
+    gap: 0.4rem;
+  }
+  
+  .platform-btn {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .platform-icon {
+    width: 14px;
+    height: 14px;
+  }
+  
+  .close-btn {
+    width: 28px;
+    height: 28px;
   }
 }
-/* В compact-controls убери gap или настрой по-новому */
-.compact-controls {
-  display: flex;
-  align-items: center;
-  justify-content: center; /* Центрируем оставшуюся кнопку */
+
+@media (max-width: 480px) {
+  .compact-player {
+    width: 90%;
+    padding: 0.5rem 0.8rem;
+  }
+  
+  .compact-player-content {
+    gap: 0.6rem;
+    height: 40px;
+  }
+  
+  .player-left {
+    min-width: 120px;
+    max-width: 140px;
+  }
+  
+  .player-center {
+    min-width: 150px;
+    max-width: 180px;
+  }
+  
+  .compact-platforms {
+    gap: 0.3rem;
+  }
+  
+  .platform-btn {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .platform-icon {
+    width: 12px;
+    height: 12px;
+  }
+}
+.platform-btn>img {
+  filter: invert(100);
+}
+
+.compact-player {
+    /* остальные стили */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-50%) translateY(100px);
+    transition: all 0.3s ease;
+}
+
+.compact-player.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+.compact-player.hiding {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-50%) translateY(100px);
 }
