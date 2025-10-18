@@ -1,145 +1,81 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const STEAM_ID = '76561199631936952';
-    const STEAM_API_KEY = '7D72F6B0A7A4A9B2A6A6A6A6A6A6A6A6';
-    
-    // Находим элементы с проверкой
-    const GAME_STATS_ELEMENT = document.querySelector('.data-card .game');
-    const GAME_LINK_ELEMENT = document.querySelector('.game-link');
+    // ВАЖНО: STEAM_API_KEY и STEAM_ID_64 больше НЕ нужны здесь,
+    // так как они теперь безопасно хранятся на вашем прокси-сервере Vercel.
+    // const STEAM_API_KEY = 'ВАШ_STEAM_API_КЛЮЧ';
+    // const STEAM_ID_64 = 'ВАШ_STEAM_ID64';
 
-    console.log('Steam init - Game element:', GAME_STATS_ELEMENT, 'Game link:', GAME_LINK_ELEMENT);
+    const GAME_STATS_ELEMENT = document.querySelector('.data-card .game'); // Селектор для вашей карточки игры
 
+    // Проверка, что элемент для отображения статистики игры существует на странице
     if (!GAME_STATS_ELEMENT) {
-        console.log('Game stats element not found');
-        return;
+        console.error("Элемент для игровой статистики не найден. Убедитесь, что на странице есть div с классом 'data-card' и вложенный div с классом 'game'.");
+        return; // Прекращаем выполнение, если элемент не найден
     }
 
+    // Получаем ссылки на элементы внутри карточки игры
     const gameNameElement = GAME_STATS_ELEMENT.querySelector('.game-info__name');
     const gamePlatformElement = GAME_STATS_ELEMENT.querySelector('.game-info__platform');
     const gameCoverElement = GAME_STATS_ELEMENT.querySelector('.game-cover img');
-    const hoursElement = GAME_STATS_ELEMENT.querySelector('.hours');
+    const gameHoursElement = GAME_STATS_ELEMENT.querySelector('.hours');
+    
+    // Функция для получения недавно сыгранных игр
+    function fetchSteamRecentGames() {
+        const vercelProxyUrl = 'https://mettaneko-steam-proxy.vercel.app/api/steam/recent-games'; 
 
-    let currentGame = null;
-
-    // Обработчик клика по карточке игры (только если элемент найден)
-    if (GAME_LINK_ELEMENT) {
-        GAME_LINK_ELEMENT.addEventListener('click', (event) => {
-            event.preventDefault();
-            
-            if (currentGame && currentGame.name !== 'Failed to load Steam API') {
-                // Открываем страницу игры в Steam
-                openSteamGame(currentGame);
-            } else {
-                console.log('No valid game data available');
-            }
-        });
-    } else {
-        console.log('Game link element not found');
-    }
-
-    // Функция для открытия игры в Steam
-    function openSteamGame(gameInfo) {
-        if (gameInfo.steamUrl) {
-            // Если есть прямой URL игры, используем его
-            window.open(gameInfo.steamUrl, '_blank');
-        } else if (gameInfo.appid) {
-            // Если есть appid, создаем URL
-            const steamUrl = `https://store.steampowered.com/app/${gameInfo.appid}`;
-            window.open(steamUrl, '_blank');
-        } else {
-            // Если нет appid, ищем игру в магазине Steam
-            const encodedGameName = encodeURIComponent(gameInfo.name);
-            const steamStoreUrl = `https://store.steampowered.com/search/?term=${encodedGameName}`;
-            window.open(steamStoreUrl, '_blank');
-        }
-    }
-
-    function fetchSteamData() {
-        const url = `https://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v1/?key=${STEAM_API_KEY}&steamid=${STEAM_ID}&format=json`;
-
-        fetch(url)
-            .then(response => response.json())
+        // Выполняем запрос к вашему Vercel прокси-серверу
+        fetch(vercelProxyUrl)
+            .then(response => {
+                // Проверяем, был ли ответ успешным (статус 200-299)
+                if (!response.ok) {
+                    // Если ответ не ОК, выбрасываем ошибку с HTTP-статусом
+                    // Пытаемся прочитать текст ошибки для лучшей диагностики
+                    return response.text().then(text => {
+                        throw new Error(`HTTP error! Status: ${response.status}, Message: ${text}`);
+                    });
+                }
+                // Если ответ ОК, парсим его как JSON
+                return response.json();
+            })
             .then(data => {
-                if (data?.response?.games?.length > 0) {
-                    const game = data.response.games[0];
-                    const playtimeHours = Math.round(game.playtime_forever / 60);
-                    
-                    // Получаем дополнительную информацию об игре
-                    fetchGameInfo(game.appid, playtimeHours);
+                // Проверяем, есть ли данные о играх в ответе
+                if (data && data.response && data.response.games && data.response.games.length > 0) {
+                    const game = data.response.games[0]; // Берем последнюю сыгранную игру
+                    const gameName = game.name;
+                    const playtimeMinutes = game.playtime_2weeks; // Время игры за последние 2 недели в минутах
+                    const playtimeHours = (playtimeMinutes / 60).toFixed(1); // Конвертируем в часы с одним знаком после запятой
+
+                    // Формируем URL обложки игры (используем appid для получения обложки со Steam CDN)
+                    const gameCoverUrl = `https://cdn.akamai.steamstatic.com/steam/apps/${game.appid}/header.jpg`;
+
+                    // Обновляем HTML-элементы на странице
+                    gameCoverElement.src = gameCoverUrl;
+                    gameNameElement.textContent = gameName;
+                    gamePlatformElement.textContent = 'Steam'; // Платформа всегда Steam
+                    gameHoursElement.textContent = '● '+playtimeHours+' H';
                 } else {
-                    currentGame = null;
+                    // Если данных о играх нет (например, профиль приватный, или нет недавно сыгранных игр)
+                    console.log("Нет данных о недавно сыгранных играх Steam. Профиль приватный или нет игр за последние 2 недели.");
+                    // Устанавливаем заглушки
                     gameNameElement.textContent = 'NO DATA';
                     gamePlatformElement.textContent = '';
-                    hoursElement.textContent = '';
+                    gameCoverElement.src = 'assets/on_off.png'; // Убедитесь, что у вас есть такая заглушка
+                    gameHoursElement.textContent = '';
                 }
             })
             .catch(error => {
-                console.error('Steam API error:', error);
-                currentGame = null;
-                gameNameElement.textContent = 'Failed to load Steam API';
+                // Обработка любых ошибок, возникших при запросе или обработке данных
+                console.error('Ошибка при получении данных Steam через прокси:', error);
+                // Устанавливаем заглушки при ошибке
+                gameNameElement.textContent = 'Failed to load Steam';
                 gamePlatformElement.textContent = '';
-                hoursElement.textContent = '';
+                gameCoverElement.src = 'assets/on_off.png';
+                gameHoursElement.textContent = '';
+                gameHoursTextElement.textContent = '';
             });
     }
 
-    function fetchGameInfo(appid, playtimeHours) {
-        // Используем Steam Store API для получения информации об игре
-        const storeUrl = `https://store.steampowered.com/api/appdetails?appids=${appid}`;
-
-        fetch(storeUrl)
-            .then(response => response.json())
-            .then(data => {
-                if (data[appid]?.success) {
-                    const gameData = data[appid].data;
-                    
-                    currentGame = {
-                        name: gameData.name,
-                        appid: appid,
-                        playtimeHours: playtimeHours,
-                        steamUrl: `https://store.steampowered.com/app/${appid}`,
-                        cover: gameData.header_image || 'assets/on_off.png'
-                    };
-
-                    // Обновляем UI
-                    gameCoverElement.src = currentGame.cover;
-                    gameNameElement.textContent = currentGame.name;
-                    gamePlatformElement.textContent = 'Steam';
-                    hoursElement.textContent = `${playtimeHours}h`;
-
-                } else {
-                    // Если не удалось получить данные об игре, используем базовую информацию
-                    currentGame = {
-                        name: `AppID: ${appid}`,
-                        appid: appid,
-                        playtimeHours: playtimeHours,
-                        steamUrl: `https://store.steampowered.com/app/${appid}`,
-                        cover: 'assets/on_off.png'
-                    };
-
-                    gameCoverElement.src = currentGame.cover;
-                    gameNameElement.textContent = currentGame.name;
-                    gamePlatformElement.textContent = 'Steam';
-                    hoursElement.textContent = `${playtimeHours}h`;
-                }
-            })
-            .catch(error => {
-                console.error('Steam Store API error:', error);
-                // Создаем базовую информацию об игре
-                currentGame = {
-                    name: `Game (${appid})`,
-                    appid: appid,
-                    playtimeHours: playtimeHours,
-                    steamUrl: `https://store.steampowered.com/app/${appid}`,
-                    cover: 'assets/on_off.png'
-                };
-
-                gameCoverElement.src = currentGame.cover;
-                gameNameElement.textContent = currentGame.name;
-                gamePlatformElement.textContent = 'Steam';
-                hoursElement.textContent = `${playtimeHours}h`;
-            });
-    }
-
-    // Инициализация
-    fetchSteamData();
-    setInterval(fetchSteamData, 300000); // Обновляем каждые 5 минут
+    // Вызываем функцию при загрузке страницы
+    fetchSteamRecentGames();
+    // Обновляем данные каждые 5 минут (300 000 миллисекунд)
+    setInterval(fetchSteamRecentGames, 60000 * 5); 
 });
