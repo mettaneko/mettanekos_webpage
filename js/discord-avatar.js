@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     loadDiscordAvatar();
-    // Интервал для обновления (например, каждые 10 минут)
-    setInterval(loadDiscordAvatar, 10 * 60 * 1000); 
+    // Интервал для обновления (например, каждые 1 минут)
+    setInterval(loadDiscordAvatar, 1 * 60 * 1000); 
+
 });
