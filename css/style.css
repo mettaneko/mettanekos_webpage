@@ -16,13 +16,13 @@
     --play-badge: rgb(151, 144, 78); - yellow */
 
 :root {
-    --text-color: rgb(222, 216, 255);
+    --text-color: rgb(255, 225, 216);
     --background-color: rgb(255, 255, 255);
-    --card-background: rgba(169, 149, 255, 0.1);
-    --accent-color: rgb(169, 149, 255);
-    --webring-color: rgb(169, 149, 255);
-    --gray-text-color: rgb(177, 162, 248);
-    --play-badge: rgb(90, 78, 151);
+    --card-background: rgba(255, 197, 149, 0.1);
+    --accent-color: rgb(255, 205, 149);
+    --webring-color: rgb(255, 179, 149);
+    --gray-text-color: rgb(255, 209, 149);
+    --play-badge: rgb(151, 101, 78);
     --radius-3xl: 1.5rem;
     --font-sans: "Manrope", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
     --font-title: "Manrope", sans-serif;
@@ -1588,3 +1588,96 @@ input, textarea, [contenteditable="true"] {
         max-width: 100%;
     }
 }
+
+/* Стили для скримера */
+/* Стили для скримера с видео */
+.screamer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #000000;
+    z-index: 10000;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    cursor: pointer;
+}
+
+.screamer video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+/* Затемнение для лучшей видимости видео */
+.screamer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 1;
+}
+
+/* Индикатор закрытия (опционально) */
+.screamer::after {
+    content: 'Click or press ESC to close';
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    z-index: 2;
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.webring-content h1,
+.webring-content p,
+.webring-content span,
+.webring-content div {
+    text-align: center;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+/* Стили для блокировки взаимодействий во время скримера */
+body.screamer-active {
+    pointer-events: none;
+}
+
+body.screamer-active .page-container,
+body.screamer-active .webring-container,
+body.screamer-active .volume-card {
+    pointer-events: none;
+}
+
+/* Скример должен всегда принимать события */
+.screamer {
+    pointer-events: auto !important;
+}
+
+/* Убедитесь, что скример поверх всего */
+.screamer {
+    z-index: 10000;
+}
+
+/* Основной контент во время скримера */
+body.screamer-active {
+    cursor: default;
+}
+

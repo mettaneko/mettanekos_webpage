@@ -36,9 +36,15 @@
         </button>
     </div>
 </div>
+
     <div class="page-container">
         
         <div class="pages-wrapper">
+            <div class="webring-container 2">
+            <div class="webring-content">
+                <p>Happy Hall-o-ween! 🎃</p>
+            </div>
+        </div>
             <div class="page main-card profile-card active" id="profile">
                 <div class="profile-header">
     <div class="profile-picture-container">
@@ -47,9 +53,7 @@
         
     </div>
     <div class="profile-text-container">
-        <h1 class="profile-name pink-text">
-            mettaneko
-        </h1>
+        <h1 class="profile-name pink-text">mettaneko</h1>
         <p class="profile-description">GameDev // Web // Datapacks</p>
                         <div class="language-grid">
                             <!--<div class="language-item">
@@ -74,6 +78,9 @@
                 <p class="profile-description">less opacity = less experience
                 </p>
                 <div class="language-grid">
+                    <!-- <div class="language-item">
+                        <a href="https://scratch.mit.edu/"><img src="assets/scratch.svg" alt="scratch" class="language-icon"></a>
+                    </div> -->
                     <div class="language-item">
                         <a href="https://html.spec.whatwg.org/multipage/"><img src="assets/html.svg" alt="HTML" class="language-icon"></a>
                     </div>
@@ -238,6 +245,13 @@
   </div>
 </div>
 
+<div id="screamer" class="screamer">
+    <video id="screamerVideo" loop>
+        <source src="assets/1026.mp4" type="video/mp4">
+        Ваш браузер не поддерживает видео.
+    </video>
+</div>
+
 <script src="js/video-player.js"></script>
 <script src="js/navigation.js"></script>
 <script src="js/compact-player.js"></script> <!-- ДОЛЖЕН БЫТЬ ПЕРЕД lastfm.js -->
@@ -261,6 +275,7 @@ document.getElementById('introOverlay').addEventListener('click', () => {
     });
 });
 </script>
+<script src="js/screamer.js"></script>
 
 
 </body>
