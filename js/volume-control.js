@@ -1,25 +1,28 @@
-window.addEventListener('load', () => {
-    const loadingScreen = document.getElementById('loadingScreen');
-    const video = document.getElementById('bgVideo');
-    const volumeBtn = document.querySelector('.volume-btn');
-    if (volumeBtn) {
-        volumeBtn.addEventListener('click', () => {
-            // Инвертируем состояние мьюта
+// Load saved volume state from localStorage
+const savedMuted = localStorage.getItem("videoMuted") === "true";
+
+document.addEventListener("DOMContentLoaded", function() {
+    const volumeBtn = document.getElementById("volumeToggle");
+    const video = document.getElementById("bgVideo");
+    
+    if (volumeBtn && video) {
+        // Apply saved volume state
+        video.muted = savedMuted;
+        updateVolumeButton(volumeBtn, video.muted);
+        
+        volumeBtn.addEventListener("click", function() {
             video.muted = !video.muted;
-            
-            // Обновляем состояние кнопки
-            updateVolumeButtonState(volumeBtn, video);
+            // Save volume state to localStorage
+            localStorage.setItem("videoMuted", video.muted.toString());
+            updateVolumeButton(volumeBtn, video.muted);
         });
     }
-
-    // Функция обновления состояния кнопки
-    function updateVolumeButtonState(button, videoElement) {
-        if (!button || !videoElement) return;
-        
-        // Добавляем/удаляем класс для визуального отражения состояния
-        button.classList.toggle('is-muted', videoElement.muted);
-        
-        // Обновляем атрибут aria-label для доступности
-        button.setAttribute('aria-label', videoElement.muted ? 'Unmute' : 'Mute');
-    }
 });
+
+function updateVolumeButton(button, isMuted) {
+    if (isMuted) {
+        button.classList.add("is-muted");
+    } else {
+        button.classList.remove("is-muted");
+    }
+}
