@@ -16,13 +16,13 @@
     --play-badge: rgb(151, 144, 78); - yellow */
 
 :root {
-    --text-color: rgb(255, 225, 216);
+    --text-color: rgb(226, 226, 226);
     --background-color: rgb(255, 255, 255);
-    --card-background: rgba(255, 197, 149, 0.1);
-    --accent-color: rgb(255, 205, 149);
-    --webring-color: rgb(255, 179, 149);
-    --gray-text-color: rgb(255, 209, 149);
-    --play-badge: rgb(151, 101, 78);
+    --card-background: rgba(235, 235, 235, 0.1);
+    --accent-color: rgb(208, 252, 255);
+    --webring-color: rgb(171, 242, 255);
+    --gray-text-color: rgb(188, 253, 255);
+    --play-badge: rgb(78, 124, 151);
     --radius-3xl: 1.5rem;
     --font-sans: "Manrope", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
     --font-title: "Manrope", sans-serif;
@@ -1680,4 +1680,5 @@ body.screamer-active .volume-card {
 body.screamer-active {
     cursor: default;
 }
+
 
