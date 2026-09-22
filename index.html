@@ -1,316 +1,242 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>mettaneko</title>
     <link rel="shortcut icon" href="https://mc-heads.net/avatar/mettaneko/100/ico.ico" type="image/x-icon">
-    <meta name="keywords" content="mettaneko mttnk меттанеко метта мэтта мэттанеко мета мэта метанеко мэтанеко сервер сервера minecraft майнкрафт майнкрафт plasmo rp рпсервера рп датапак дата пак nautilus Rilda Rework rilda rilda server project rilda project://rilda мяу гав рильда проджект проект рильда">
-    <meta name="description" content="useless programmer i guess">
-    <link rel="stylesheet" href="css/style.css">    
+    <title>mettaneko</title>
+    <meta name="description" content="portfolio of mettaneko. Developer, GameDev, Web, and Datapacks creator.">
+    <meta name="keywords" content="mettaneko, mttnk, меттанеко, метта, мэтта, мэттанеко, мета, мэта, метанеко, мэтанеко сервер, сервера minecraft, майнкрафт, майнкрафт, plasmo rp, рпсервера, рп, датапак, дата пак, nautilus, Rilda Rework, rilda, rilda server, project rilda, project://rilda, мяу, гав, рильда проджект, проект рильда, mettaneko, portfolio, gamedev, web development, datapacks, programmer, python, c++, c#, javascript, Minecraft, mods">
+    <meta name="author" content="mettaneko">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://mettaneko.ru">
+    
+    <meta property="og:title" content="mettaneko">
+    <meta property="og:description" content="Developer, GameDev, Web, Datapacks, Minecraft Mods">
+    <meta property="og:url" content="https://mettaneko.ru">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://avatars.githubusercontent.com/u/55776002?v=4">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<a href="#">
-<div class="intro-overlay" id="introOverlay">
-  <div class="intro-text">click to enter..</div>
-</div></a>
 
+    <div class="intro-overlay" id="introOverlay">
+        <div class="intro-text">click to enter..</div>
+    </div>
 
-
-
-    <div class="video-background">
-        <video loop id="bgVideo">
-            <source src="" type="video/mp4">
-            Ваш браузер не поддерживает видео.
+    <div class="video-bg">
+        <video loop playsinline id="bgVideo">
+            <source src="assets/default.mp4" type="video/mp4" id="bgVideoSource">
         </video>
         <div class="video-overlay"></div>
     </div>
-    <div class="volume-card">
 
-    <!-- Volume Button -->
-    <button id="volumeToggle" class="volume-btn">
-        <svg class="volume-icon volume-on" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
-        </svg>
-        <svg class="volume-icon volume-off" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
-        </svg>
-    </button>
-        <!-- Theme Switch Button -->
-    <button id="themeToggle" class="volume-btn" title="Switch Theme">
-        <svg class="volume-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 17.93V20h-2v-.07A8.001 8.001 0 014.07 13H4v-2h.07A8.001 8.001 0 0111 4.07V4h2v.07A8.001 8.001 0 0119.93 11H20v2h-.07A8.001 8.001 0 0113 19.93z"/>
-        </svg>
-    </button>
+    <main class="container">
 
-</div>
-</div>
+        <div class="bento-grid">
+            
+            <div class="bento-card profile-card">
 
-    <div class="page-container">
-        
-        <div class="pages-wrapper">
-            <div class="webring-container 2">
-            <div class="webring-content">
-                <p>всё равно зима скоро.</p>
+                <div class="profile-avatar-container">
+                    <img src="https://avatars.githubusercontent.com/u/55776002?v=4" alt="Github Avatar" class="default-avatar">
+                    <img src="assets/avatar.gif" alt="Discord Avatar" class="discord-avatar" id="discordAvatar">
+                </div>
+                <div class="profile-info">
+                    <h1 class="profile-name">mettaneko</h1>
+                    <p class="profile-title">GameDev // Web // Datapacks</p>
+                    <div class="profile-bottom-row">
+                        <p class="profile-desc">17 y.o. // Moscow</p>
+                        <div class="card-controls"><div class="volume-control">
+                        <svg class="volume-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                        </svg>
+                        <input type="range" id="masterVolume" min="0" max="1" step="0.01" value="0.5">
+                    </div>
+                    
+                    
+                    <button class="control-btn-small" id="settingsBtn" aria-label="Settings" title="Настройки">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.06-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.73,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.06,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.43-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.49-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/></svg>
+                    </button>
+                    <button class="control-btn-small" id="themeToggleBtn" aria-label="Toggle Theme" title="Сменить тему">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/>
+                        </svg>
+                    </button>
+                </div>
+                    </div>
+                </div>
             </div>
-        </div>
-            <div class="page main-card profile-card active" id="profile">
-                <div class="profile-header">
-    <div class="profile-picture-container">
-        <img src="https://avatars.githubusercontent.com/u/55776002?v=4" alt="Profile Picture" class="profile-picture default-avatar">
-        <img src="" alt="discord avatar load is failed." class="profile-picture discord-avatar" id="discordAvatar" >
-        
-    </div>
-    <div class="profile-text-container">
-        <h1 class="profile-name pink-text">mettaneko</h1>
-        <p class="profile-description">GameDev // Web // Datapacks</p>
-                        <div class="language-grid">
-                            <!--<div class="language-item">
-                                <a href="https://discord.gg/askydVhwJ3"><img src="assets/ds.svg" alt="DS" class="language-icon"></a>
-                            </div>-->
-                            <div class="language-item">
-                                <a href="https://t.me/mettaneko"><img src="assets/telegram.svg" alt="useless programmer i guess" class="language-icon"></a>
-                            </div>
-                            <div class="language-item">
-                                <a href="https://steamcommunity.com/id/NekoSafeForWork/"><img src="assets/steam.svg" alt="Creator of Project://Rilda" class="language-icon"></a>
-                            </div>
-                            <div class="language-item">
-                                <a href="https://www.youtube.com/@mettaneko"><img src="assets/yt.svg" alt="Minecraft Datapacker" class="language-icon"></a>
-                            </div>
+
+            <div class="bento-card socials-card" id="cardSocials">
+                <h2 class="card-label">Links</h2>
+                <nav class="social-links" aria-label="Social links">
+                    <a href="https://t.me/mettaneko" class="btn-icon" aria-label="Telegram" target="_blank">
+                        <img src="assets/telegram.svg" alt="TG" class="svg-icon">
+                    </a>
+                    <a href="https://steamcommunity.com/id/mettaneko_/" class="btn-icon" aria-label="Steam" target="_blank">
+                        <img src="assets/steam.svg" alt="Steam" class="svg-icon">
+                    </a>
+                    <a href="https://youtube.com/@mettaneko" class="btn-icon" aria-label="YouTube" target="_blank">
+                        <img src="assets/yt.svg" alt="YouTube" class="svg-icon">
+                    </a>
+                </nav>
+            </div>
+
+            <div class="bento-card tech-card" id="cardTech">
+                <h2 class="card-label">Tech Stack</h2>
+                <div class="tech-icons">
+                    <img src="assets/python.svg" alt="Python" title="Python" class="svg-icon">
+                    <img src="assets/cpp.svg" alt="C++" title="C++" class="svg-icon">
+                    <img src="assets/csharp.svg" alt="C#" title="C#" class="svg-icon">
+                    <img src="assets/html.svg" alt="HTML" title="HTML" class="svg-icon">
+                    <img src="assets/css.svg" alt="CSS" title="CSS" class="svg-icon">
+                    <img src="assets/js.svg" alt="JavaScript" title="JS" class="svg-icon">
+                </div>
+            </div>
+
+            <div class="bento-card projects-card" id="cardProjects">
+                <div class="projects-header">
+                    <h2 class="card-label">Projects</h2>
+                    <div class="projects-controls">
+                        <div class="filter-tabs" id="filterTabsContainer">
+                            <div class="filter-slider" id="filterSlider"></div>
+                            <button class="filter-tab active" data-filter="all" data-color="var(--color-accent-primary)">ALL</button>
+                            <button class="filter-tab" data-filter="active" data-color="#ccf904">ACTIVE</button>
+                            <button class="filter-tab" data-filter="in-dev" data-color="#ffaa00">IN-DEV</button>
+                            <button class="filter-tab" data-filter="closed" data-color="#ff5555">CLOSED</button>
+                        </div>
+                        <input type="text" id="projectSearch" class="filter-search" placeholder="Search...">
+                    </div>
+                </div>
+                <div class="projects-list">
+                    <a class="project-item" data-tag="active" href="https://github.com/mettaneko/mettaneko" target="_blank">
+                        <span class="badge badge-dev">● active</span>
+                        <div class="project-details">
+                            <h3 class="card-title">mettaneko.ru</h3>
+                            <p class="card-desc">You're already here lol. What's wrong bro? :3c.</p>
+                        </div>
+                    </a>
+                    
+                    <a class="project-item" data-tag="closed" href="https://rilda.mettaneko.ru" target="_blank">
+                        <span class="badge badge-closed">● closed</span>
+                        <div class="project-details">
+                            <h3 class="card-title">Project://Rilda</h3>
+                            <p class="card-desc">Minecraft server with Vanilla++ mechanics.</p>
+                        </div>
+                    </a>
+                    
+                    <a class="project-item" data-tag="active" href="https://t.me/oneshotfeedbot" target="_blank">
+                        <span class="badge badge-dev">● active</span>
+                        <div class="project-details">
+                            <h3 class="card-title">OneShot Feed</h3>
+                            <p class="card-desc">Telegram Mini-App w/ OneShot videos in TikTok reference!</p>
+                        </div>
+                    </a>
+                    
+                    <a class="project-item" data-tag="closed" href="https://github.com/mettaneko/Cryonium" target="_blank">
+                        <span class="badge badge-closed">● closed</span>
+                        <div class="project-details">
+                            <h3 class="card-title">Cryonium</h3>
+                            <p class="card-desc">AV fork mango for Winter Zombies Mode.</p>
+                        </div>
+                    </a>
+                    
+                    <a class="project-item" data-tag="closed" href="https://github.com/mettaneko/TCM-2023" target="_blank">
+                        <span class="badge badge-closed">● Сlosed</span>
+                        <div class="project-details">
+                            <h3 class="card-title">TCM 2023</h3>
+                            <p class="card-desc">School project written in Python using Pygame.</p>
+                        </div>
+                    </a>
+                    
+                    <a class="project-item" data-tag="in-dev" href="#">
+                        <span class="badge badge-deprecated">● IN-DEV</span>
+                        <div class="project-details">
+                            <h3 class="card-title">Fragments of Timeline</h3>
+                            <p class="card-desc">No info. Powered by Godot Engine.</p>
+                        </div>
+                    </a>
+                    
+                    <a class="project-item" data-tag="in-dev" href="#">
+                        <span class="badge badge-deprecated">● IN-DEV</span>
+                        <div class="project-details">
+                            <h3 class="card-title">Luminium</h3>
+                            <p class="card-desc">Light-weight Sober's Single-Instance Bypass Manager.</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="bento-card activity-card music-card" id="cardMusic">
+                <h2 class="card-label" id="lastfmStatus">Listening to</h2>
+                <div class="activity-content">
+                    <div class="cover-wrapper" id="trackPlayBtn">
+                        <img src="assets/on_off.png" alt="Album Cover" class="activity-cover" id="lastfmCover">
+                        <div class="play-overlay hidden" id="playOverlay">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
                         </div>
                     </div>
+                    <div class="activity-info">
+                        <a href="#" id="lastfmLink" target="_blank" class="track-link">
+                            <h3 class="card-title ellipsis-text" id="lastfmTrack">Failed to load</h3>
+                            <p class="card-desc ellipsis-text" id="lastfmArtist">Last.fm</p>
+                        </a>
+                    </div>
+                    <img src="assets/lastfm.svg" alt="LastFM" class="activity-logo svg-icon">
+                </div>
+                <audio id="trackAudio"></audio>
+            </div>
+
+            <a href="https://steamcommunity.com/id/mettaneko_/" class="bento-card activity-card game-card" id="cardGame" target="_blank">
+                <h2 class="card-label">Playing</h2>
+                <div class="activity-content">
+                    <img src="assets/on_off.png" alt="Game Cover" class="activity-cover" id="steamCover">
+                    <div class="activity-info">
+                        <h3 class="card-title ellipsis-text" id="steamGame">Loading...</h3>
+                        <p class="card-desc ellipsis-text" id="steamHours">Steam API</p>
+                    </div>
+                    <img src="assets/steam.svg" alt="Steam" class="activity-logo svg-icon">
+                </div>
+            </a>
+
+
+            <div class="bento-card webring-card" id="cardWebring">
+                <h2 class="card-label">Webring</h2>
+                <div class="webring-content">
+                    <a href="#" class="btn-icon-small" aria-label="Previous Webring">&larr;</a>
+                    <span class="webring-title">Indie Web</span>
+                    <a href="#" class="btn-icon-small" aria-label="Next Webring">&rarr;</a>
                 </div>
             </div>
 
-            <div class="page main-card languages-card" id="languages">
-                <h2 class="block-title">Languages</h2>
-                <p class="profile-description">less opacity = less experience
-                </p>
-                <div class="language-grid">
-                    <!-- <div class="language-item">
-                        <a href="https://scratch.mit.edu/"><img src="assets/scratch.svg" alt="scratch" class="language-icon"></a>
-                    </div> -->
-                    <div class="language-item">
-                        <a href="https://html.spec.whatwg.org/multipage/"><img src="assets/html.svg" alt="HTML" class="language-icon"></a>
-                    </div>
-                    <div class="language-item">
-                        <a href="https://www.w3.org/Style/CSS/"><img src="assets/css.svg" alt="CSS" class="language-icon"></a>
-                    </div>
-                    <div class="language-item">
-                        <a href="https://www.python.org/"><img src="assets/python.svg" alt="Python" class="language-icon opacity-90"></a>
-                    </div>
-                    <div class="language-item">
-                        <a href="https://isocpp.org/"><img src="assets/cpp.svg" alt="C++" class="language-icon opacity-70"></a>
-                    </div>
-                    <div class="language-item">
-                        <a href="https://www.csharp.net/"><img src="assets/csharp.svg" alt="С#" class="language-icon opacity-50"></a>
-                    </div>
-                    <div class="language-item">
-                        <a href="https://ecma-international.org/publications-and-standards/standards/ecma-262/"><img src="assets/js.svg" alt="JavaScript" class="language-icon opacity-30">
-                    </div>
-                    <div>
-                        <a></a>
-                    </div>
+
+            
+
+
+            <div class="bento-card badges-card" id="cardBadges">
+                <h2 class="card-label">Badges</h2>
+                <div class="badges-container">
+                    <a href="https://discord.com"><img src="https://cyber.dabamos.de/88x31/discord.gif" alt="Discord" class="y2k-badge"></a>
                 </div>
             </div>
 
-            <div class="page main-card projects-card" id="projects">
-                <h2 class="block-title">Projects</h2>
-                <div class="projects-list">
-                    <a href="" class="project-card">
-                        <strong class="project-badge active-badge">● Active</strong>
-                        <h3>Portfolio</h3>
-                        <p>U are already here lol. What's wrong bro? :3c</p>
-                    </a>
-                    <a href="https://rilda.mettaneko.ru" class="project-card">
-                        <strong class="project-badge closed-badge">● Сlosed</strong>
-                        <h3>Project://Rilda</h3>
-                        <p>Minecraft server with Vanilla++ mechanics.</p>
-                    </a>
-                    <a href="https://t.me/oneshotfeedbot" class="project-card">
-                        <strong class="project-badge deprecated-badge">● Deprecated</strong>
-                        <h3>OneShot Feed</h3>
-                        <p>Telegram Mini-App w/ OneShot videos in TikTok reference!</p>
-                    </a>
-                    <a href="https://github.com/mettaneko/Winter-Normal-Macro" class="project-card">
-                        <strong class="project-badge closed-badge">● Сlosed</strong>
-                        <h3>Cryonium</h3>
-                        <p>AV fork mango for Winter Zombies Mode.</p>
-                    </a>
-                    <a href="https://github.com/mettaneko/TCM-2923" class="project-card">
-                        <strong class="project-badge closed-badge">● Сlosed</strong>
-                        <h3>TCM 2023</h3>
-                        <p>School project written in Python using Pygame.</p>
-                    </a>
-                    <a href="" class="project-card">
-                        <strong class="project-badge dev-badge">● ???</strong>
-                        <h3>Fragments of Timeline</h3>
-                        <p></p>
-                    </a>
-                    
-                    
+            <div class="bento-card settings-card" id="cardSettings">
+                <div class="dashboard-header" style="display: flex; justify-content: space-between; align-items: center;">
+                    <h2 class="card-label" id="dashboardTitle" style="margin: 0; cursor: pointer; display: flex; align-items: center; gap: 6px;">DASHBOARD <span id="dashboardArrow" style="font-size: 10px; color: var(--color-text-secondary); transition: transform 0.3s;">▼</span></h2>
+                    <button id="resetDashboardBtn" class="btn-icon-small" style="font-size: 10px; height: 24px; padding: 0 8px; width: auto; border-radius: 4px;" title="Reset Grid Layout">RESET</button>
+                </div>
+                <div class="settings-list hidden-module" id="settingsList" style="margin-top: 16px;">
                 </div>
             </div>
 
-<div class="page main-card stats-card" id="stats">
-    <h2 class="block-title">Statistics</h2>
-    <div class="stats-content-wrapper">
-        <a class="project-card song-link" target="_blank">
-            <div class="data-card">
-                <div class="song">
-                    <div class="album-cover">
-                        <img src="assets/on_off.png" alt="Album Cover">
-                    </div>
-                    <div class="song-info">
-                        <h3 class="song-info__name">Failed to load Last.Fm</h3>
-                        <p class="song-info__artist"></p>
-                    </div>
-                    <div class="play-badge">
-                        <p class="plays-text"></p>
-                        <p class="plays"></p>
-                    </div>
-                </div>
-            </div>
-        </a>
-
-        <a href="https://steamcommunity.com/id/mettaneko_/" class="project-card game-link" target="_blank">
-            <div class="data-card">
-                <div class="game">
-                    <div class="game-cover">
-                        <img src="assets/on_off.png" alt="Game Cover">
-                    </div>
-                    <div class="game-info">
-                        <h3 class="game-info__name">Failed to load Steam API</h3>
-                        <p class="game-info__platform"></p>
-                    </div>
-                    <div class="play-badge">
-                        <p class="hours"></p>
-                    </div>
-                </div>
-            </div>
-        </a>
-    </div>
-</div>
         </div>
-                
-        <div class="webring-container">
-            <div class="webring-content">
-                <a href="#" id="prev-button" class="webring-link"><<</a>
-                <a href="#" id="next-button" class="webring-link">>></a>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- В разделе modal добавьте класс active для инициализации -->
-<div class="modal" id="choiceModal">
-  <div class="modal-content main-card">
-    <div class="modal-header">
-      <h3 class="block-title">Выбери платформу</h3>
-    </div>
+    </main>
 
-    <div class="song-info">
-      <p class="modal-song-name"></p>
-    </div>
-
-    <div class="modal-actions">
-      <button class="action-button vk-button" id="goToVK" title="VK">
-        <img src="assets/vk.svg" alt="vk" class="language-icon">
-      </button>
-
-      <button class="action-button lastfm-button" id="goToLastFm" title="Last.fm">
-        <img src="assets/lastfm.svg" alt="ls" class="language-icon">
-      </button>
-    </div>
-  </div>
-</div>
-
-<div class="compact-player" id="compactPlayer">
-  <div class="compact-player-content">
-    <!-- Левая часть: обложка и информация -->
-    <div class="player-left">
-      <div class="compact-album-cover">
-        <img src="assets/on_off.png" alt="Album Cover" id="compactAlbumCover">
-      </div>
-      <div class="compact-track-info">
-        <div class="track-name-container" id="trackNameContainer">
-          <div class="track-name-scroll" id="trackNameScroll">
-            <span class="compact-track-name" id="compactTrackName">Track Name</span>
-          </div>
-        </div>
-        <p class="compact-artist-name" id="compactArtistName">Artist Name</p>
-      </div>
-    </div>
-    
-    <!-- Центральная часть: кнопки платформ -->
-    <div class="player-center">
-      <div class="compact-platforms">
-        <button class="platform-btn vk-platform" data-platform="vk" title="VK Music">
-          <img src="assets/vk.svg" alt="VK" class="platform-icon">
-        </button>
-        <button class="platform-btn spotify-platform" data-platform="spotify" title="Spotify">
-          <img src="assets/spotify.svg" alt="Spotify" class="platform-icon">
-        </button>
-        <button class="platform-btn youtube-platform" data-platform="youtube" title="YouTube Music">
-          <img src="assets/yt.svg" alt="YouTube" class="platform-icon">
-        </button>
-        <button class="platform-btn lastfm-platform" data-platform="lastfm" title="Last.fm">
-          <img src="assets/lastfm.svg" alt="Last.fm" class="platform-icon">
-        </button>
-      </div>
-    </div>
-    
-    <!-- Правая часть: закрытие -->
-    <div class="player-right">
-      <button class="close-btn" id="compactCloseBtn" title="Close">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-        </svg>
-      </button>
-    </div>
-  </div>
-</div>
-
-<div id="screamer" class="screamer">
-    <video id="screamerVideo" loop>
-        <source src="assets/1026.mp4" type="video/mp4">
-        Ваш браузер не поддерживает видео.
-    </video>
-</div>
-
-<script src="js/video-player.js"></script>
-<script src="js/navigation.js"></script>
-<script src="js/compact-player.js"></script> <!-- ДОЛЖЕН БЫТЬ ПЕРЕД lastfm.js -->
-<script src="js/lastfm.js"></script>
-<script src="js/steam_stats_v2.js"></script>
-<script src="js/volume-control.js"></script>
-<script src="js/discord-avatar.js"></script>
-<script>
-document.getElementById('introOverlay').addEventListener('click', () => {
-    const overlay = document.getElementById('introOverlay');
-    const video = document.getElementById('bgVideo');
-
-    overlay.classList.add('hidden');
-
-    // Включаем видео с сохраненным состоянием звука
-    const savedMuted = localStorage.getItem("videoMuted") === "true";
-    
-    if (!savedMuted) {
-        // Если звук был включен, пытаемся воспроизвести со звуком
-        video.muted = false;
-        video.play().catch(() => {
-            // Если автоплей заблокирован — пробуем без звука
-            video.muted = true;
-            localStorage.setItem("videoMuted", "true");
-            video.play();
-        });
-    } else {
-        // Если звук был выключен, воспроизводим без звука
-        video.muted = true;
-        video.play();
-    }
-});
-</script>
-<script src="js/theme.js" type="module"></script>
-
+    <script src="js/discord-avatar.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>
