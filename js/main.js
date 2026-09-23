@@ -315,8 +315,12 @@ document.addEventListener('DOMContentLoaded', () => {
         resetSettingsBtn.addEventListener('click', (e) => {
             e.stopPropagation();
 
-
+            // Keep Settings card open during reset!
+            const isSettingsVisible = modules.find(m => m.id === 'cardSettings')?.visible || true;
             modules = JSON.parse(JSON.stringify(defaultModules));
+            const settingsMod = modules.find(m => m.id === 'cardSettings');
+            if (settingsMod) settingsMod.visible = isSettingsVisible;
+
             saveState();
 
             if (document.startViewTransition) {
@@ -376,6 +380,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderDOMOrder() {
+        let contentVisibleCount = 0;
+        let isProfileVisible = false;
+
         modules.forEach((mod, index) => {
             const el = document.getElementById(mod.id);
             if (el) {
@@ -384,9 +391,26 @@ document.addEventListener('DOMContentLoaded', () => {
                     el.classList.add('hidden-module');
                 } else {
                     el.classList.remove('hidden-module');
+                    if (mod.id !== 'cardSettings') {
+                        contentVisibleCount++;
+                    }
+                    if (mod.id === 'cardProfile') {
+                        isProfileVisible = true;
+                    }
                 }
             }
         });
+
+        const bentoGrid = document.querySelector('.bento-grid');
+        if (bentoGrid) {
+            // Apply single-card-mode ONLY if Profile is the absolutely ONLY content card visible
+            // We ignore settings in the count, so opening settings doesn't break the centering.
+            if (contentVisibleCount === 1 && isProfileVisible) {
+                bentoGrid.classList.add('single-card-mode');
+            } else {
+                bentoGrid.classList.remove('single-card-mode');
+            }
+        }
     }
 
     function renderDashboard() {

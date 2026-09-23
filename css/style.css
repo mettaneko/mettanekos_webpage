@@ -3,8 +3,8 @@
 :root[data-theme="default"] {
     --color-text-primary: #f4f6ee;
     --color-text-secondary: #a8ae94;
-    --color-accent-primary: #b44242; 
-    --color-accent-secondary: #803e3e; 
+    --color-accent-primary: #b44242;
+    --color-accent-secondary: #803e3e;
     --color-surface-base: #000000;
     --color-surface-card: rgba(6, 6, 6, 0.45);
     --color-border-muted: rgba(255, 255, 255, 0.1);
@@ -80,7 +80,7 @@ body {
     -webkit-font-smoothing: antialiased;
     min-height: 100vh;
     display: flex;
-    justify-content: center;
+    justify-content: center !important;
     align-items: center;
     position: relative;
     overflow-x: hidden;
@@ -145,7 +145,7 @@ a {
     background-color: #000000;
     z-index: 1000;
     display: flex;
-    justify-content: center;
+    justify-content: center !important;
     align-items: center;
     cursor: pointer;
     transition: opacity 0.8s ease, visibility 0.8s ease;
@@ -185,7 +185,7 @@ a {
     color: var(--color-text-secondary);
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: center !important;
     cursor: pointer;
     transition: all var(--motion-fast) ease;
 }
@@ -210,11 +210,11 @@ a {
     height: 32px;
     transition: all var(--motion-fast) ease;
     overflow: hidden;
-    width: 32px; 
+    width: 32px;
 }
 
 .volume-control:hover, .volume-control:focus-within {
-    width: 100px; 
+    width: 100px;
     background-color: rgba(255, 255, 255, 0.1);
     border-color: var(--color-text-secondary);
 }
@@ -261,7 +261,7 @@ a {
     background-color: rgba(0, 0, 0, 0.6);
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: center !important;
     color: #fff;
     opacity: 0;
     transition: opacity var(--motion-fast) ease;
@@ -430,14 +430,14 @@ a {
 
 .socials-card {
     align-items: center;
-    justify-content: center;
+    justify-content: center !important;
 }
 
 .social-links {
     display: flex;
     flex-wrap: nowrap;
     gap: 6px;
-    justify-content: center;
+    justify-content: center !important;
 }
 .social-links .btn-icon {
     width: 40px;
@@ -451,7 +451,7 @@ a {
 .btn-icon {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: center !important;
     width: 48px;
     height: 48px;
     border-radius: var(--radius-pill);
@@ -471,19 +471,19 @@ a {
 
 .tech-card {
     align-items: center;
-    justify-content: center;
+    justify-content: center !important;
 }
 
 .tech-icons {
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
-    justify-content: center;
+    justify-content: center !important;
     align-items: center;
 }
 
 .tech-icons .svg-icon {
-    width: 28px; 
+    width: 28px;
     height: 28px;
     opacity: 0.7;
     transition: all 0.25s ease;
@@ -540,7 +540,7 @@ a {
     font-size: var(--font-size-sm);
     color: var(--color-text-secondary);
     line-height: 1.4;
-    white-space: normal; 
+    white-space: normal;
 }
 
 .activity-card { justify-content: space-between; }
@@ -685,7 +685,7 @@ a {
 .y2k-badge {
     width: 88px;
     height: 31px;
-    image-rendering: pixelated; 
+    image-rendering: pixelated;
     border-radius: 2px;
     transition: transform var(--motion-fast) ease;
 }
@@ -735,7 +735,7 @@ a {
     color: var(--color-text-secondary);
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: center !important;
     text-decoration: none;
     font-size: 16px;
     font-weight: bold;
@@ -762,6 +762,8 @@ a {
     padding: var(--space-2) var(--space-3);
     border-radius: var(--radius-md);
     border: 1px solid var(--color-border-muted);
+    max-width: 240px;
+    margin: 0 auto; width: 100%; /* Centers the item itself if container is wide, and adds bottom gap */
 }
 .setting-info {
     display: flex;
@@ -837,7 +839,7 @@ a {
     border: 1px solid var(--color-border-muted);
     border-radius: 4px;
     display: flex;
-    justify-content: center;
+    justify-content: center !important;
     align-items: center;
     transition: all var(--motion-fast) ease;
 }
@@ -852,10 +854,10 @@ a {
     content: "";
     position: absolute;
     display: none;
-    left: 6px;
-    top: 2px;
-    width: 4px;
-    height: 9px;
+    left: 7px;
+    top: 3px;
+    width: 5px;
+    height: 10px;
     border: solid var(--color-surface-card);
     border-width: 0 2px 2px 0;
     transform: rotate(45deg);
@@ -880,20 +882,20 @@ a {
 
 @media (max-width: 576px) {
     .profile-card {
-        gap: 16px; 
+        gap: 16px;
     }
     .profile-avatar-container {
         width: 72px;
         height: 72px;
     }
     .profile-name {
-        
-        
+
+
         white-space: nowrap;
     }
-    
 
-    
+
+
     .card-controls {
         position: relative;
         top: 0;
@@ -904,7 +906,7 @@ a {
     .control-btn-small svg { width: 14px; height: 14px; }
     .volume-control { height: 28px; width: 28px; padding: 2px 6px; gap: 2px; }
     .volume-icon { width: 14px; height: 14px; }
-    
+
 
 }
 
@@ -922,5 +924,34 @@ a {
         position: absolute;
         top: var(--space-3);
         right: var(--space-3);
+    }
+}
+
+/* Center perfectly only on desktop */
+@media (min-width: 992px) {
+    .bento-grid.single-card-mode {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: flex-start !important;
+        flex-wrap: wrap;
+        width: fit-content !important;
+        margin: 0 auto;
+    }
+
+    .bento-grid.single-card-mode .bento-card {
+        grid-column: auto !important;
+        width: 288px !important;
+    }
+
+    .bento-grid.single-card-mode .profile-card {
+        width: 600px !important;
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 576px) {
+    .tech-icons {
+        max-width: 220px;
+        margin: 0 auto;
     }
 }
