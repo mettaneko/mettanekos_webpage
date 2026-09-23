@@ -8,7 +8,6 @@ const CONFIG = {
     ],
     lastFm: {
         username: "mettaneko",
-        apiKey: "852bcf95c701d83a2c8c9bfd5a14bdcb",
         limit: 1
     }
 };
@@ -122,22 +121,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const statusEl = document.getElementById('lastfmStatus');
     const linkEl = document.getElementById('lastfmLink');
 
-    async function fetchDeezerPreview(artist, song) {
+    async function fetchItunesPreview(artist, song) {
         try {
-            const res = await fetch(`https://mettaneko-steam-proxy.vercel.app/api/deezer?artist=${encodeURIComponent(artist)}&track=${encodeURIComponent(song)}`);
+            const query = encodeURIComponent(`${artist} ${song}`);
+            const res = await fetch(`https://itunes.apple.com/search?term=${query}&entity=song&limit=10`);
             const data = await res.json();
-            if (data.success && data.preview) {
-                return data.preview;
+            if (data.results && data.results.length > 0) {
+                const artistLower = artist.toLowerCase().trim();
+                // Ищем трек, где имя артиста совпадает хотя бы частично, чтобы избежать чужих каверов
+                const validTrack = data.results.find(t => t.artistName.toLowerCase().includes(artistLower));
+                if (validTrack) return validTrack.previewUrl;
             }
         } catch (err) {
-            console.error('Deezer fetch error:', err);
+            console.error('iTunes fetch error:', err);
         }
         return null;
     }
 
     function fetchLastFmData() {
-        const { username, apiKey, limit } = CONFIG.lastFm;
-        const proxyUrl = `https://mettaneko-steam-proxy.vercel.app/api/lastfm?user=${username}&api_key=${apiKey}&limit=${limit}`;
+        const { username, limit } = CONFIG.lastFm;
+        const proxyUrl = `https://mettaneko-steam-proxy.vercel.app/api/lastfm?user=${username}&limit=${limit}`;
 
         fetch(proxyUrl)
             .then(res => res.json())
@@ -158,7 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const encodedSongName = encodeURIComponent(songName);
                     linkEl.href = `https://www.last.fm/music/${encodedArtist}/_/${encodedSongName}`;
 
-                    const previewUrl = await fetchDeezerPreview(artist, songName);
+                    const previewUrl = await fetchItunesPreview(artist, songName);
                     if (previewUrl) {
                         currentTrackUrl = previewUrl;
                         playOverlay.classList.remove('hidden');
@@ -201,7 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const game = data.response.games[0];
                     const gameName = game.name;
                     const playtimeHours = (game.playtime_2weeks / 60).toFixed(1);
-                    const gameCoverUrl = `https://cdn.akamai.steamstatic.com/steam/apps/${game.appid}/header.jpg`;
+                    const gameCoverUrl = `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${game.appid}/header.jpg`;
                     
                     steamGameEl.textContent = gameName;
                     steamHoursEl.textContent = `● ${playtimeHours} hrs (past 2 weeks)`;
