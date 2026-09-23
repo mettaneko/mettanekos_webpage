@@ -1,5 +1,5 @@
 const CONFIG = {
-    defaultTheme: "default", 
+    defaultTheme: "default",
     themes: [
         { name: "default", video: "assets/default.mp4" },
         { name: "raven", video: "assets/raven.mp4" },
@@ -52,13 +52,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const introOverlay = document.getElementById('introOverlay');
     const masterVolumeSlider = document.getElementById('masterVolume');
-    const trackAudio = document.getElementById('trackAudio');
-    
+
     let currentMasterVolume = parseFloat(localStorage.getItem('masterVolume')) || 0.5;
     masterVolumeSlider.value = currentMasterVolume;
-    
+
     bgVideo.volume = currentMasterVolume;
-    trackAudio.volume = currentMasterVolume;
 
     introOverlay.addEventListener('click', () => {
         introOverlay.classList.add('hidden');
@@ -72,10 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
     masterVolumeSlider.addEventListener('input', (e) => {
         currentMasterVolume = parseFloat(e.target.value);
         localStorage.setItem('masterVolume', currentMasterVolume);
-        if (trackAudio.paused) {
-            bgVideo.volume = currentMasterVolume;
-        }
-        trackAudio.volume = currentMasterVolume;
+        bgVideo.volume = currentMasterVolume;
     });
 
     let fadeInterval;
@@ -95,25 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const playOverlay = document.getElementById('playOverlay');
     let currentTrackUrl = null;
 
-    trackPlayBtn.addEventListener('click', () => {
-        if (!currentTrackUrl) return;
 
-        if (trackAudio.paused) {
-            trackAudio.src = currentTrackUrl;
-            trackAudio.play();
-            fadeVideoVolume(0);
-            playOverlay.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
-        } else {
-            trackAudio.pause();
-            fadeVideoVolume(currentMasterVolume);
-            playOverlay.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
-        }
-    });
-
-    trackAudio.addEventListener('ended', () => {
-        fadeVideoVolume(currentMasterVolume);
-        playOverlay.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
-    });
 
     const trackEl = document.getElementById('lastfmTrack');
     const artistEl = document.getElementById('lastfmArtist');
@@ -121,24 +98,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const statusEl = document.getElementById('lastfmStatus');
     const linkEl = document.getElementById('lastfmLink');
 
-    async function fetchItunesPreview(artist, song) {
-        try {
-            const query = encodeURIComponent(`${artist} ${song}`);
-            const res = await fetch(`https://itunes.apple.com/search?term=${query}&entity=song&limit=10`);
-            const data = await res.json();
-            if (data.results && data.results.length > 0) {
-                const artistLower = artist.toLowerCase().trim();
-                // Ищем трек, где имя артиста совпадает хотя бы частично, чтобы избежать чужих каверов
-                const validTrack = data.results.find(t => t.artistName.toLowerCase().includes(artistLower));
-                if (validTrack) return validTrack.previewUrl;
-            }
-        } catch (err) {
-            console.error('iTunes fetch error:', err);
-        }
-        return null;
-    }
 
-    function fetchLastFmData() {
+
+        function fetchLastFmData() {
         const { username, limit } = CONFIG.lastFm;
         const proxyUrl = `https://mettaneko-steam-proxy.vercel.app/api/lastfm?user=${username}&limit=${limit}`;
 
@@ -157,34 +119,41 @@ document.addEventListener('DOMContentLoaded', () => {
                     coverEl.src = albumCover;
                     statusEl.textContent = isNowPlaying ? '● Listening now' : '● Last played';
 
-                    const encodedArtist = encodeURIComponent(artist);
-                    const encodedSongName = encodeURIComponent(songName);
-                    linkEl.href = `https://www.last.fm/music/${encodedArtist}/_/${encodedSongName}`;
+                    const query = encodeURIComponent(`${artist} ${songName}`);
+                    linkEl.href = `https://music.yandex.ru/search?text=${query}`;
 
-                    const previewUrl = await fetchItunesPreview(artist, songName);
-                    if (previewUrl) {
-                        currentTrackUrl = previewUrl;
-                        playOverlay.classList.remove('hidden');
-                        playOverlay.style.opacity = '1';
-                    } else {
-                        currentTrackUrl = null;
+                    if (playOverlay) {
                         playOverlay.classList.add('hidden');
                     }
-
                 } else {
                     trackEl.textContent = 'No recent tracks';
                     artistEl.textContent = '---';
+                    coverEl.src = 'assets/on_off.png';
+                    statusEl.textContent = '● Offline';
+                    if (playOverlay) playOverlay.classList.add('hidden');
                 }
             })
             .catch(err => {
                 console.error('Last.fm fetch error:', err);
-                trackEl.textContent = 'API Blocked/Failed';
-                artistEl.textContent = 'Proxy Error';
             });
     }
 
+
     fetchLastFmData();
     setInterval(fetchLastFmData, 15000);
+
+
+    const musicCard = document.getElementById('cardMusic');
+    if (musicCard) {
+        musicCard.style.cursor = 'pointer';
+        musicCard.addEventListener('click', (e) => {
+            if (e.target.closest('a')) return; // don't double trigger if clicking the title link
+            const url = document.getElementById('lastfmLink')?.href;
+            if (url && url !== '#' && !url.endsWith('#')) {
+                window.open(url, '_blank');
+            }
+        });
+    }
 
     const steamGameEl = document.getElementById('steamGame');
     const steamHoursEl = document.getElementById('steamHours');
@@ -205,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const gameName = game.name;
                     const playtimeHours = (game.playtime_2weeks / 60).toFixed(1);
                     const gameCoverUrl = `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${game.appid}/header.jpg`;
-                    
+
                     steamGameEl.textContent = gameName;
                     steamHoursEl.textContent = `● ${playtimeHours} hrs (past 2 weeks)`;
                     steamCoverEl.src = gameCoverUrl;
@@ -220,8 +189,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     fetchSteamData();
     setInterval(fetchSteamData, 5 * 60 * 1000);
-    
-    
+
+
     const filterTabsContainer = document.getElementById('filterTabsContainer');
     const filterTabs = document.querySelectorAll('.filter-tab');
     const filterSlider = document.getElementById('filterSlider');
@@ -232,34 +201,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateSlider(tab) {
         if (!filterSlider || !filterTabsContainer) return;
-        
+
         const left = tab.offsetLeft;
         const top = tab.offsetTop;
         const width = tab.offsetWidth;
         const height = tab.offsetHeight;
-        
+
         filterSlider.style.transform = `translate(${left}px, ${top}px)`;
         filterSlider.style.width = `${width}px`;
         filterSlider.style.height = `${height}px`;
-        
-        
+
+
         const activeColor = tab.getAttribute('data-color');
-        filterTabs.forEach(t => t.style.color = ''); 
+        filterTabs.forEach(t => t.style.color = '');
         tab.style.color = activeColor;
     }
 
     function applyFilters() {
         if (!projectsList) return;
         const query = searchInput.value.toLowerCase();
-        
+
         projectsList.style.opacity = '0';
-        
+
         setTimeout(() => {
             projectItems.forEach(item => {
                 const tag = item.getAttribute('data-tag');
                 const title = item.querySelector('.card-title').textContent.toLowerCase();
                 const desc = item.querySelector('.card-desc').textContent.toLowerCase();
-                
+
                 const matchTag = (currentTag === 'all' || tag === currentTag);
                 const matchSearch = (title.includes(query) || desc.includes(query));
 
@@ -274,25 +243,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (filterTabs.length > 0 && searchInput) {
-        
+
         const activeTab = document.querySelector('.filter-tab.active') || filterTabs[0];
-        
+
         setTimeout(() => updateSlider(activeTab), 50);
 
         filterTabs.forEach(tab => {
             tab.addEventListener('click', () => {
                 filterTabs.forEach(t => t.classList.remove('active'));
                 tab.classList.add('active');
-                
+
                 updateSlider(tab);
-                
+
                 currentTag = tab.getAttribute('data-filter');
                 applyFilters();
             });
         });
         searchInput.addEventListener('input', applyFilters);
-        
-        
+
+
         window.addEventListener('resize', () => {
             const currentTab = document.querySelector('.filter-tab.active');
             if (currentTab) updateSlider(currentTab);
@@ -304,34 +273,34 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 'cardSocials', name: 'Social Links', toggleable: true, visible: true },
         { id: 'cardTech', name: 'Tech Stack', toggleable: true, visible: true },
         { id: 'cardProjects', name: 'Projects', toggleable: true, visible: true },
-        { id: 'cardMusic', name: 'Last.fm', toggleable: true, visible: true },
+        { id: 'cardMusic', name: 'Yandex Music', toggleable: true, visible: true },
         { id: 'cardGame', name: 'Steam', toggleable: true, visible: true },
         { id: 'cardWebring', name: 'Webring', toggleable: true, visible: false },
         { id: 'cardBadges', name: 'Badges', toggleable: true, visible: false },
-        { id: 'cardSettings', name: 'Dashboard', toggleable: false, visible: false }
+        { id: 'cardSettings', name: 'Settings', toggleable: false, visible: false }
     ];
 
-    let modules = JSON.parse(localStorage.getItem('bentoModulesData_v3'));
+    let modules = JSON.parse(localStorage.getItem('bentoModulesData_v4'));
     if (!modules || modules.length !== defaultModules.length) {
         modules = defaultModules;
     }
 
     const settingsList = document.getElementById('settingsList');
-    const dashboardTitle = document.getElementById('dashboardTitle');
-    const dashboardArrow = document.getElementById('dashboardArrow');
-    
-    
-    if (dashboardTitle) {
-        dashboardTitle.addEventListener('click', () => {
+    const settingsTitle = document.getElementById('settingsTitle');
+    const settingsArrow = document.getElementById('settingsArrow');
+
+
+    if (settingsTitle) {
+        document.getElementById('settingsTitle').addEventListener('click', () => {
             const toggleAccordion = () => {
                 settingsList.classList.toggle('hidden-module');
                 if (settingsList.classList.contains('hidden-module')) {
-                    dashboardArrow.style.transform = 'rotate(0deg)';
+                    settingsArrow.style.transform = 'rotate(0deg)';
                 } else {
-                    dashboardArrow.style.transform = 'rotate(180deg)';
+                    settingsArrow.style.transform = 'rotate(180deg)';
                 }
             };
-            
+
             if (document.startViewTransition) {
                 document.startViewTransition(toggleAccordion);
             } else {
@@ -340,16 +309,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const resetDashboardBtn = document.getElementById('resetDashboardBtn');
-    
-    if (resetDashboardBtn) {
-        resetDashboardBtn.addEventListener('click', (e) => {
-            e.stopPropagation(); 
-            
-            
+    const resetSettingsBtn = document.getElementById('resetSettingsBtn');
+
+    if (resetSettingsBtn) {
+        resetSettingsBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+
+
             modules = JSON.parse(JSON.stringify(defaultModules));
             saveState();
-            
+
             if (document.startViewTransition) {
                 document.startViewTransition(() => {
                     renderDOMOrder();
@@ -369,7 +338,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (mod) {
                 mod.visible = !mod.visible;
                 saveState();
-                
+
                 if (document.startViewTransition) {
                     const transition = document.startViewTransition(() => renderDOMOrder());
                     if (mod.visible) {
@@ -378,7 +347,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             if (card) {
                                 card.scrollIntoView({ behavior: 'smooth', block: 'center' });
                                 card.classList.remove('highlight-anim');
-                                void card.offsetWidth; 
+                                void card.offsetWidth;
                                 card.classList.add('highlight-anim');
                                 setTimeout(() => card.classList.remove('highlight-anim'), 1600);
                             }
@@ -392,7 +361,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             if (card) {
                                 card.scrollIntoView({ behavior: 'smooth', block: 'center' });
                                 card.classList.remove('highlight-anim');
-                                void card.offsetWidth; 
+                                void card.offsetWidth;
                                 card.classList.add('highlight-anim');
                                 setTimeout(() => card.classList.remove('highlight-anim'), 1600);
                             }
@@ -403,7 +372,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function saveState() {
-        localStorage.setItem('bentoModulesData_v3', JSON.stringify(modules));
+        localStorage.setItem('bentoModulesData_v4', JSON.stringify(modules));
     }
 
     function renderDOMOrder() {
@@ -423,14 +392,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderDashboard() {
         if (!settingsList) return;
         settingsList.innerHTML = '';
-        
+
         modules.forEach((mod, index) => {
             if (mod.id === 'cardProfile' || mod.id === 'cardSettings' || mod.id === 'cardBadges' || mod.id === 'cardWebring') return;
 
             const item = document.createElement('div');
             item.className = 'setting-item';
-            item.draggable = true; 
-            
+            item.draggable = true;
+
             let toggleHTML = '';
             if (mod.toggleable) {
                 toggleHTML = `
@@ -449,31 +418,31 @@ document.addEventListener('DOMContentLoaded', () => {
                     ${toggleHTML}
                 </div>
             `;
-            
-            
+
+
             item.addEventListener('dragstart', (e) => {
                 e.dataTransfer.setData('text/plain', index);
                 item.classList.add('dragging');
             });
-            
+
             item.addEventListener('dragend', () => {
                 item.classList.remove('dragging');
             });
-            
+
             item.addEventListener('dragover', (e) => {
-                e.preventDefault(); 
+                e.preventDefault();
             });
-            
+
             item.addEventListener('drop', (e) => {
                 e.preventDefault();
                 const fromIndex = parseInt(e.dataTransfer.getData('text/plain'));
                 const toIndex = index;
-                
+
                 if (fromIndex !== toIndex && !isNaN(fromIndex)) {
-                    
+
                     const movedItem = modules.splice(fromIndex, 1)[0];
                     modules.splice(toIndex, 0, movedItem);
-                    
+
                     saveState();
                     if (document.startViewTransition) {
                         document.startViewTransition(() => {
@@ -494,7 +463,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.toggleModule = function(index, isVisible) {
         modules[index].visible = isVisible;
         saveState();
-        
+
         if (document.startViewTransition) {
             document.startViewTransition(() => renderDOMOrder());
         } else {
