@@ -122,26 +122,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const statusEl = document.getElementById('lastfmStatus');
     const linkEl = document.getElementById('lastfmLink');
 
-    async function fetchItunesPreview(artist, song) {
+    async function fetchDeezerPreview(artist, song) {
         try {
-            const query = encodeURIComponent(`${artist} ${song}`);
-            const res = await fetch(`https://itunes.apple.com/search?term=${query}&entity=song&limit=1`);
+            const res = await fetch(`https://mettaneko-steam-proxy.vercel.app/api/deezer?artist=${encodeURIComponent(artist)}&track=${encodeURIComponent(song)}`);
             const data = await res.json();
-            if (data.results && data.results.length > 0) {
-                return data.results[0].previewUrl;
+            if (data.success && data.preview) {
+                return data.preview;
             }
         } catch (err) {
-            console.error('iTunes fetch error:', err);
+            console.error('Deezer fetch error:', err);
         }
         return null;
     }
 
     function fetchLastFmData() {
         const { username, apiKey, limit } = CONFIG.lastFm;
-        const targetUrl = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${username}&api_key=${apiKey}&format=json&limit=${limit}`;
-        const proxiedUrl = `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`;
+        const proxyUrl = `https://mettaneko-steam-proxy.vercel.app/api/lastfm?user=${username}&api_key=${apiKey}&limit=${limit}`;
 
-        fetch(proxiedUrl)
+        fetch(proxyUrl)
             .then(res => res.json())
             .then(async data => {
                 if (data?.recenttracks?.track?.length > 0) {
@@ -160,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const encodedSongName = encodeURIComponent(songName);
                     linkEl.href = `https://www.last.fm/music/${encodedArtist}/_/${encodedSongName}`;
 
-                    const previewUrl = await fetchItunesPreview(artist, songName);
+                    const previewUrl = await fetchDeezerPreview(artist, songName);
                     if (previewUrl) {
                         currentTrackUrl = previewUrl;
                         playOverlay.classList.remove('hidden');
@@ -206,7 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const gameCoverUrl = `https://cdn.akamai.steamstatic.com/steam/apps/${game.appid}/header.jpg`;
                     
                     steamGameEl.textContent = gameName;
-                    steamHoursEl.textContent = `● ${playtimeHours} H (2 weeks)`;
+                    steamHoursEl.textContent = `● ${playtimeHours} hrs (past 2 weeks)`;
                     steamCoverEl.src = gameCoverUrl;
                 } else {
                     steamGameEl.textContent = 'NO DATA';
